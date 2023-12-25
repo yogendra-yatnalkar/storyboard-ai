@@ -1,3 +1,9 @@
+**/*.mp4
+**/*.pkl
+**/*.pt
+./draw-video/images/masks
+/masks
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
