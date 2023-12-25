@@ -105,7 +105,7 @@ start_time = time.time()
 
 # video save path
 img_name = img_path.rsplit("/", 1)[-1].rsplit(".", 1)[0]
-video_save_name = img_name + ".mp4"
+video_save_name = img_name + "-u4" + ".mp4"
 save_video_path = os.path.join("./save_videos", video_save_name)
 print("save_video_path: ", save_video_path)
 
@@ -159,62 +159,62 @@ cv2.imshow("hand_mask_inv", hand_mask_inv)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-# # draw
-# video = cv2.VideoWriter(save_video_path, cv2.VideoWriter_fourcc(*"mp4v"), frame_rate, (img.shape[1], img.shape[0]))
+# draw
+video = cv2.VideoWriter(save_video_path, cv2.VideoWriter_fourcc(*"mp4v"), frame_rate, (img.shape[1], img.shape[0]))
 
-# # creating an emtpy frame and select 0th index as the starting point to draw
-# drawn_frame = np.zeros(img.shape, np.uint8) + np.array([255, 255, 255], np.uint8)
-# selected_ind = 0
-# n_cuts_vertical = int(math.ceil(img.shape[0]/split_len))
-# n_cuts_horizontal = int(math.ceil(img.shape[1]/split_len))
+# creating an emtpy frame and select 0th index as the starting point to draw
+drawn_frame = np.zeros(img.shape, np.uint8) + np.array([255, 255, 255], np.uint8)
+selected_ind = 0
+n_cuts_vertical = int(math.ceil(img.shape[0]/split_len))
+n_cuts_horizontal = int(math.ceil(img.shape[1]/split_len))
 
-# grid_of_cuts = np.array(np.split(img_thresh, n_cuts_horizontal, axis=-1))
-# grid_of_cuts = np.array(np.split(grid_of_cuts, n_cuts_vertical, axis=-2))
-# print(grid_of_cuts.shape)
+grid_of_cuts = np.array(np.split(img_thresh, n_cuts_horizontal, axis=-1))
+grid_of_cuts = np.array(np.split(grid_of_cuts, n_cuts_vertical, axis=-2))
+print(grid_of_cuts.shape)
 
-# cut_having_black = (grid_of_cuts < 10)*1
-# cut_having_black = np.sum(np.sum(cut_having_black, axis = -1), axis = -1)
-# cut_black_indices = np.array(np.where(cut_having_black > 0)).T
+cut_having_black = (grid_of_cuts < 10)*1
+cut_having_black = np.sum(np.sum(cut_having_black, axis = -1), axis = -1)
+cut_black_indices = np.array(np.where(cut_having_black > 0)).T
 
 
-# counter = 0
-# while(len(cut_black_indices) > 1):
-#     selected_ind_val = cut_black_indices[selected_ind].copy()
-#     range_v_start = selected_ind_val[0]*split_len
-#     range_v_end = range_v_start + split_len
-#     range_h_start = selected_ind_val[1]*split_len
-#     range_h_end = range_h_start + split_len
+counter = 0
+while(len(cut_black_indices) > 1):
+    selected_ind_val = cut_black_indices[selected_ind].copy()
+    range_v_start = selected_ind_val[0]*split_len
+    range_v_end = range_v_start + split_len
+    range_h_start = selected_ind_val[1]*split_len
+    range_h_end = range_h_start + split_len
 
-#     temp_drawing = np.zeros((split_len, split_len, 3))
-#     temp_drawing[:, :, 0] = grid_of_cuts[selected_ind_val[0]][selected_ind_val[1]]
-#     temp_drawing[:, :, 1] = grid_of_cuts[selected_ind_val[0]][selected_ind_val[1]]
-#     temp_drawing[:, :, 2] = grid_of_cuts[selected_ind_val[0]][selected_ind_val[1]]
+    temp_drawing = np.zeros((split_len, split_len, 3))
+    temp_drawing[:, :, 0] = grid_of_cuts[selected_ind_val[0]][selected_ind_val[1]]
+    temp_drawing[:, :, 1] = grid_of_cuts[selected_ind_val[0]][selected_ind_val[1]]
+    temp_drawing[:, :, 2] = grid_of_cuts[selected_ind_val[0]][selected_ind_val[1]]
 
-#     drawn_frame[range_v_start:range_v_end, range_h_start:range_h_end] = temp_drawing
+    drawn_frame[range_v_start:range_v_end, range_h_start:range_h_end] = temp_drawing
 
-#     hand_coord_x = range_h_start + int(split_len/2)
-#     hand_coord_y = range_v_start + int(split_len/2)
-#     drawn_frame_with_hand = draw_hand_on_img(drawn_frame.copy(), hand.copy(), hand_coord_x, hand_coord_y, hand_mask_inv.copy(), hand_ht, hand_wd, img_ht, img_wd)
+    hand_coord_x = range_h_start + int(split_len/2)
+    hand_coord_y = range_v_start + int(split_len/2)
+    drawn_frame_with_hand = draw_hand_on_img(drawn_frame.copy(), hand.copy(), hand_coord_x, hand_coord_y, hand_mask_inv.copy(), hand_ht, hand_wd, img_ht, img_wd)
 
-#     # delete the selected ind from the d_array
-#     cut_black_indices[selected_ind] = cut_black_indices[-1]
-#     cut_black_indices = cut_black_indices[:-1]
+    # delete the selected ind from the d_array
+    cut_black_indices[selected_ind] = cut_black_indices[-1]
+    cut_black_indices = cut_black_indices[:-1]
 
-#     del selected_ind
+    del selected_ind
 
-#     # select the next new index
-#     euc_arr = euc_dist(cut_black_indices, selected_ind_val)
-#     selected_ind = np.argmin(euc_arr)
+    # select the next new index
+    euc_arr = euc_dist(cut_black_indices, selected_ind_val)
+    selected_ind = np.argmin(euc_arr)
 
-#     counter += 1
-#     if(counter%5 == 0):
-#         video.write(drawn_frame_with_hand)
-#         print("len of black indices: ", len(cut_black_indices))
+    counter += 1
+    if(counter%5 == 0):
+        video.write(drawn_frame_with_hand)
+        print("len of black indices: ", len(cut_black_indices))
 
-# for i in range(frame_rate):
-#     video.write(img_gray)
+for i in range(frame_rate):
+    video.write(img_gray)
 
-# end_time = time.time()
-# print('total time: ', end_time - start_time)
+end_time = time.time()
+print('total time: ', end_time - start_time)
 
-# video.release()
+video.release()
