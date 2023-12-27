@@ -21,7 +21,7 @@ def get_extreme_coordinates(mask):
     topleft = (np.min(x), np.min(y))
     bottomright = (np.max(x), np.max(y))
 
-    return topleft, bottomright
+    return topleft, bottomright 
 
 
 def draw_hand_on_img(
