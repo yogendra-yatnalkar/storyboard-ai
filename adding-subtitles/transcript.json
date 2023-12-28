@@ -1,0 +1,2225 @@
+{
+  "text": " Once, there was a boy who became bored when he watched over the village sheep grazing on the hillside. To entertain himself, he sang out, Wolf, Wolf, the wolf is chasing the sheep. When the villagers heard the cry, they ran up the hill to drive the wolf away. But when they arrived, they saw no wolf. The boy was amused when he saw their angry faces. Don't scream wolf when there is no wolf, boy! The villagers warned. They angrily went back down the hill. Later, the shepherd boy cried out once again, Wolf, Wolf, the wolf is chasing the sheep. To his amusement, the villagers came running up the hill to scare the wolf away. As they saw there was no wolf, they said strictly, Save your frightened cry for when there really is a wolf. Don't cry, Wolf, when there is no wolf. But the boy grinned at their words while they walked, grumbling down the hill once more. The last time, a real wolf came and wanted to eat his sheep. The boy said help, help. But the people did not listen to him. They thought he was lying again. They did not help him and he lost his sheep. The story ends with an old man telling the boy that lying is bad and people will not trust you if you lie. The moral of the story is, lying breaks trust. And no one believes a liar, even when they tell the truth.",
+  "segments": [
+    {
+      "id": 0,
+      "seek": 0,
+      "start": 0.18,
+      "end": 5.38,
+      "text": " Once, there was a boy who became bored when he watched over the village sheep grazing",
+      "tokens": [
+        50364,
+        3443,
+        11,
+        456,
+        390,
+        257,
+        3237,
+        567,
+        3062,
+        13521,
+        562,
+        415,
+        6337,
+        670,
+        264,
+        7288,
+        14213,
+        48112,
+        50640
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11834895485325864,
+      "compression_ratio": 1.6908212560386473,
+      "no_speech_prob": 0.01132685411721468,
+      "confidence": 0.984,
+      "words": [
+        {
+          "text": "Once,",
+          "start": 0.18,
+          "end": 0.86,
+          "confidence": 0.967
+        },
+        {
+          "text": "there",
+          "start": 1.12,
+          "end": 1.34,
+          "confidence": 0.988
+        },
+        {
+          "text": "was",
+          "start": 1.34,
+          "end": 1.6,
+          "confidence": 0.999
+        },
+        {
+          "text": "a",
+          "start": 1.6,
+          "end": 1.8,
+          "confidence": 0.994
+        },
+        {
+          "text": "boy",
+          "start": 1.8,
+          "end": 1.98,
+          "confidence": 0.992
+        },
+        {
+          "text": "who",
+          "start": 1.98,
+          "end": 2.24,
+          "confidence": 0.991
+        },
+        {
+          "text": "became",
+          "start": 2.24,
+          "end": 2.56,
+          "confidence": 0.995
+        },
+        {
+          "text": "bored",
+          "start": 2.56,
+          "end": 2.94,
+          "confidence": 0.995
+        },
+        {
+          "text": "when",
+          "start": 2.94,
+          "end": 3.18,
+          "confidence": 0.946
+        },
+        {
+          "text": "he",
+          "start": 3.18,
+          "end": 3.4,
+          "confidence": 0.992
+        },
+        {
+          "text": "watched",
+          "start": 3.4,
+          "end": 3.78,
+          "confidence": 0.985
+        },
+        {
+          "text": "over",
+          "start": 3.78,
+          "end": 4.16,
+          "confidence": 0.979
+        },
+        {
+          "text": "the",
+          "start": 4.16,
+          "end": 4.34,
+          "confidence": 0.986
+        },
+        {
+          "text": "village",
+          "start": 4.34,
+          "end": 4.64,
+          "confidence": 0.966
+        },
+        {
+          "text": "sheep",
+          "start": 4.64,
+          "end": 4.98,
+          "confidence": 0.982
+        },
+        {
+          "text": "grazing",
+          "start": 4.98,
+          "end": 5.38,
+          "confidence": 0.99
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "seek": 0,
+      "start": 5.38,
+      "end": 6.6,
+      "text": " on the hillside.",
+      "tokens": [
+        50640,
+        322,
+        264,
+        10997,
+        1812,
+        13,
+        50732
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11834895485325864,
+      "compression_ratio": 1.6908212560386473,
+      "no_speech_prob": 0.01132685411721468,
+      "confidence": 0.977,
+      "words": [
+        {
+          "text": "on",
+          "start": 5.38,
+          "end": 5.78,
+          "confidence": 0.999
+        },
+        {
+          "text": "the",
+          "start": 5.78,
+          "end": 5.96,
+          "confidence": 0.998
+        },
+        {
+          "text": "hillside.",
+          "start": 5.96,
+          "end": 6.6,
+          "confidence": 0.955
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "seek": 0,
+      "start": 7.2,
+      "end": 14.34,
+      "text": " To entertain himself, he sang out, Wolf, Wolf, the wolf is chasing the sheep.",
+      "tokens": [
+        50732,
+        1407,
+        7655,
+        3647,
+        11,
+        415,
+        9980,
+        484,
+        11,
+        16634,
+        11,
+        16634,
+        11,
+        264,
+        19216,
+        307,
+        17876,
+        264,
+        14213,
+        13,
+        51114
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11834895485325864,
+      "compression_ratio": 1.6908212560386473,
+      "no_speech_prob": 0.01132685411721468,
+      "confidence": 0.871,
+      "words": [
+        {
+          "text": "To",
+          "start": 7.2,
+          "end": 7.6,
+          "confidence": 0.997
+        },
+        {
+          "text": "entertain",
+          "start": 7.6,
+          "end": 8.06,
+          "confidence": 0.999
+        },
+        {
+          "text": "himself,",
+          "start": 8.06,
+          "end": 8.76,
+          "confidence": 0.997
+        },
+        {
+          "text": "he",
+          "start": 9.14,
+          "end": 9.46,
+          "confidence": 0.992
+        },
+        {
+          "text": "sang",
+          "start": 9.46,
+          "end": 9.74,
+          "confidence": 0.978
+        },
+        {
+          "text": "out,",
+          "start": 9.74,
+          "end": 10.26,
+          "confidence": 0.997
+        },
+        {
+          "text": "Wolf,",
+          "start": 10.52,
+          "end": 11.06,
+          "confidence": 0.346
+        },
+        {
+          "text": "Wolf,",
+          "start": 11.6,
+          "end": 12.08,
+          "confidence": 0.652
+        },
+        {
+          "text": "the",
+          "start": 12.54,
+          "end": 12.7,
+          "confidence": 0.85
+        },
+        {
+          "text": "wolf",
+          "start": 12.7,
+          "end": 13.02,
+          "confidence": 0.808
+        },
+        {
+          "text": "is",
+          "start": 13.02,
+          "end": 13.28,
+          "confidence": 0.997
+        },
+        {
+          "text": "chasing",
+          "start": 13.28,
+          "end": 13.68,
+          "confidence": 0.992
+        },
+        {
+          "text": "the",
+          "start": 13.68,
+          "end": 14.04,
+          "confidence": 0.992
+        },
+        {
+          "text": "sheep.",
+          "start": 14.04,
+          "end": 14.34,
+          "confidence": 0.994
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "seek": 0,
+      "start": 14.76,
+      "end": 19.92,
+      "text": " When the villagers heard the cry, they ran up the hill to drive the wolf away.",
+      "tokens": [
+        51114,
+        1133,
+        264,
+        32080,
+        2198,
+        264,
+        3305,
+        11,
+        436,
+        5872,
+        493,
+        264,
+        10997,
+        281,
+        3332,
+        264,
+        19216,
+        1314,
+        13,
+        51450
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11834895485325864,
+      "compression_ratio": 1.6908212560386473,
+      "no_speech_prob": 0.01132685411721468,
+      "confidence": 0.994,
+      "words": [
+        {
+          "text": "When",
+          "start": 14.76,
+          "end": 15.18,
+          "confidence": 0.99
+        },
+        {
+          "text": "the",
+          "start": 15.18,
+          "end": 15.4,
+          "confidence": 0.998
+        },
+        {
+          "text": "villagers",
+          "start": 15.4,
+          "end": 15.78,
+          "confidence": 0.989
+        },
+        {
+          "text": "heard",
+          "start": 15.78,
+          "end": 16.14,
+          "confidence": 0.998
+        },
+        {
+          "text": "the",
+          "start": 16.14,
+          "end": 16.44,
+          "confidence": 0.998
+        },
+        {
+          "text": "cry,",
+          "start": 16.44,
+          "end": 16.76,
+          "confidence": 0.997
+        },
+        {
+          "text": "they",
+          "start": 17.22,
+          "end": 17.46,
+          "confidence": 0.984
+        },
+        {
+          "text": "ran",
+          "start": 17.46,
+          "end": 17.72,
+          "confidence": 0.998
+        },
+        {
+          "text": "up",
+          "start": 17.72,
+          "end": 17.94,
+          "confidence": 0.999
+        },
+        {
+          "text": "the",
+          "start": 17.94,
+          "end": 18.14,
+          "confidence": 0.997
+        },
+        {
+          "text": "hill",
+          "start": 18.14,
+          "end": 18.32,
+          "confidence": 0.999
+        },
+        {
+          "text": "to",
+          "start": 18.32,
+          "end": 18.56,
+          "confidence": 0.998
+        },
+        {
+          "text": "drive",
+          "start": 18.56,
+          "end": 18.86,
+          "confidence": 0.998
+        },
+        {
+          "text": "the",
+          "start": 18.86,
+          "end": 19.12,
+          "confidence": 0.996
+        },
+        {
+          "text": "wolf",
+          "start": 19.12,
+          "end": 19.38,
+          "confidence": 0.97
+        },
+        {
+          "text": "away.",
+          "start": 19.38,
+          "end": 19.92,
+          "confidence": 0.998
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "seek": 0,
+      "start": 21.54,
+      "end": 24.5,
+      "text": " But when they arrived, they saw no wolf.",
+      "tokens": [
+        51450,
+        583,
+        562,
+        436,
+        6678,
+        11,
+        436,
+        1866,
+        572,
+        19216,
+        13,
+        51610
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11834895485325864,
+      "compression_ratio": 1.6908212560386473,
+      "no_speech_prob": 0.01132685411721468,
+      "confidence": 0.993,
+      "words": [
+        {
+          "text": "But",
+          "start": 21.54,
+          "end": 21.86,
+          "confidence": 0.989
+        },
+        {
+          "text": "when",
+          "start": 21.86,
+          "end": 22.12,
+          "confidence": 0.995
+        },
+        {
+          "text": "they",
+          "start": 22.12,
+          "end": 22.38,
+          "confidence": 0.999
+        },
+        {
+          "text": "arrived,",
+          "start": 22.38,
+          "end": 22.9,
+          "confidence": 0.999
+        },
+        {
+          "text": "they",
+          "start": 23.3,
+          "end": 23.52,
+          "confidence": 0.994
+        },
+        {
+          "text": "saw",
+          "start": 23.52,
+          "end": 23.82,
+          "confidence": 0.999
+        },
+        {
+          "text": "no",
+          "start": 23.82,
+          "end": 24.12,
+          "confidence": 0.997
+        },
+        {
+          "text": "wolf.",
+          "start": 24.12,
+          "end": 24.5,
+          "confidence": 0.972
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "seek": 0,
+      "start": 24.84,
+      "end": 28.08,
+      "text": " The boy was amused when he saw their angry faces.",
+      "tokens": [
+        51610,
+        440,
+        3237,
+        390,
+        669,
+        4717,
+        562,
+        415,
+        1866,
+        641,
+        6884,
+        8475,
+        13,
+        51812
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11834895485325864,
+      "compression_ratio": 1.6908212560386473,
+      "no_speech_prob": 0.01132685411721468,
+      "confidence": 0.984,
+      "words": [
+        {
+          "text": "The",
+          "start": 24.84,
+          "end": 25.06,
+          "confidence": 0.868
+        },
+        {
+          "text": "boy",
+          "start": 25.06,
+          "end": 25.32,
+          "confidence": 0.996
+        },
+        {
+          "text": "was",
+          "start": 25.32,
+          "end": 25.64,
+          "confidence": 1.0
+        },
+        {
+          "text": "amused",
+          "start": 25.64,
+          "end": 26.1,
+          "confidence": 0.988
+        },
+        {
+          "text": "when",
+          "start": 26.1,
+          "end": 26.4,
+          "confidence": 0.998
+        },
+        {
+          "text": "he",
+          "start": 26.4,
+          "end": 26.6,
+          "confidence": 0.999
+        },
+        {
+          "text": "saw",
+          "start": 26.6,
+          "end": 26.84,
+          "confidence": 0.999
+        },
+        {
+          "text": "their",
+          "start": 26.84,
+          "end": 27.12,
+          "confidence": 0.994
+        },
+        {
+          "text": "angry",
+          "start": 27.12,
+          "end": 27.58,
+          "confidence": 0.999
+        },
+        {
+          "text": "faces.",
+          "start": 27.58,
+          "end": 28.08,
+          "confidence": 0.999
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "seek": 2896,
+      "start": 28.96,
+      "end": 32.24,
+      "text": " Don't scream wolf when there is no wolf, boy!",
+      "tokens": [
+        50366,
+        1468,
+        380,
+        7291,
+        19216,
+        562,
+        456,
+        307,
+        572,
+        19216,
+        11,
+        3237,
+        0,
+        50550
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16937977927071707,
+      "compression_ratio": 1.6504424778761062,
+      "no_speech_prob": 0.08752601593732834,
+      "confidence": 0.916,
+      "words": [
+        {
+          "text": "Don't",
+          "start": 28.96,
+          "end": 29.08,
+          "confidence": 0.869
+        },
+        {
+          "text": "scream",
+          "start": 29.08,
+          "end": 29.46,
+          "confidence": 0.963
+        },
+        {
+          "text": "wolf",
+          "start": 29.46,
+          "end": 29.84,
+          "confidence": 0.689
+        },
+        {
+          "text": "when",
+          "start": 29.84,
+          "end": 30.1,
+          "confidence": 0.949
+        },
+        {
+          "text": "there",
+          "start": 30.1,
+          "end": 30.32,
+          "confidence": 0.997
+        },
+        {
+          "text": "is",
+          "start": 30.32,
+          "end": 30.54,
+          "confidence": 0.992
+        },
+        {
+          "text": "no",
+          "start": 30.54,
+          "end": 30.76,
+          "confidence": 0.997
+        },
+        {
+          "text": "wolf,",
+          "start": 30.76,
+          "end": 31.26,
+          "confidence": 0.985
+        },
+        {
+          "text": "boy!",
+          "start": 31.72,
+          "end": 32.24,
+          "confidence": 0.898
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "seek": 2896,
+      "start": 32.58,
+      "end": 33.82,
+      "text": " The villagers warned.",
+      "tokens": [
+        50550,
+        440,
+        32080,
+        21284,
+        13,
+        50628
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16937977927071707,
+      "compression_ratio": 1.6504424778761062,
+      "no_speech_prob": 0.08752601593732834,
+      "confidence": 0.937,
+      "words": [
+        {
+          "text": "The",
+          "start": 32.58,
+          "end": 32.88,
+          "confidence": 0.84
+        },
+        {
+          "text": "villagers",
+          "start": 32.88,
+          "end": 33.34,
+          "confidence": 0.988
+        },
+        {
+          "text": "warned.",
+          "start": 33.34,
+          "end": 33.82,
+          "confidence": 0.991
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "seek": 2896,
+      "start": 34.16,
+      "end": 36.48,
+      "text": " They angrily went back down the hill.",
+      "tokens": [
+        50628,
+        814,
+        2562,
+        470,
+        356,
+        1437,
+        646,
+        760,
+        264,
+        10997,
+        13,
+        50758
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16937977927071707,
+      "compression_ratio": 1.6504424778761062,
+      "no_speech_prob": 0.08752601593732834,
+      "confidence": 0.998,
+      "words": [
+        {
+          "text": "They",
+          "start": 34.16,
+          "end": 34.44,
+          "confidence": 0.994
+        },
+        {
+          "text": "angrily",
+          "start": 34.44,
+          "end": 35.02,
+          "confidence": 0.999
+        },
+        {
+          "text": "went",
+          "start": 35.02,
+          "end": 35.3,
+          "confidence": 0.998
+        },
+        {
+          "text": "back",
+          "start": 35.3,
+          "end": 35.7,
+          "confidence": 0.997
+        },
+        {
+          "text": "down",
+          "start": 35.7,
+          "end": 35.96,
+          "confidence": 0.999
+        },
+        {
+          "text": "the",
+          "start": 35.96,
+          "end": 36.16,
+          "confidence": 0.999
+        },
+        {
+          "text": "hill.",
+          "start": 36.16,
+          "end": 36.48,
+          "confidence": 0.998
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "seek": 2896,
+      "start": 36.82,
+      "end": 44.54,
+      "text": " Later, the shepherd boy cried out once again, Wolf, Wolf, the wolf is chasing the sheep.",
+      "tokens": [
+        50758,
+        11965,
+        11,
+        264,
+        40317,
+        3237,
+        16266,
+        484,
+        1564,
+        797,
+        11,
+        16634,
+        11,
+        16634,
+        11,
+        264,
+        19216,
+        307,
+        17876,
+        264,
+        14213,
+        13,
+        51171
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16937977927071707,
+      "compression_ratio": 1.6504424778761062,
+      "no_speech_prob": 0.08752601593732834,
+      "confidence": 0.958,
+      "words": [
+        {
+          "text": "Later,",
+          "start": 36.82,
+          "end": 37.4,
+          "confidence": 0.995
+        },
+        {
+          "text": "the",
+          "start": 37.78,
+          "end": 38.0,
+          "confidence": 0.976
+        },
+        {
+          "text": "shepherd",
+          "start": 38.0,
+          "end": 38.36,
+          "confidence": 0.934
+        },
+        {
+          "text": "boy",
+          "start": 38.36,
+          "end": 38.68,
+          "confidence": 0.991
+        },
+        {
+          "text": "cried",
+          "start": 38.68,
+          "end": 39.06,
+          "confidence": 0.996
+        },
+        {
+          "text": "out",
+          "start": 39.06,
+          "end": 39.36,
+          "confidence": 0.999
+        },
+        {
+          "text": "once",
+          "start": 39.36,
+          "end": 39.76,
+          "confidence": 0.992
+        },
+        {
+          "text": "again,",
+          "start": 39.76,
+          "end": 40.22,
+          "confidence": 0.998
+        },
+        {
+          "text": "Wolf,",
+          "start": 40.64,
+          "end": 41.22,
+          "confidence": 0.798
+        },
+        {
+          "text": "Wolf,",
+          "start": 41.84,
+          "end": 42.28,
+          "confidence": 0.753
+        },
+        {
+          "text": "the",
+          "start": 42.72,
+          "end": 42.9,
+          "confidence": 0.975
+        },
+        {
+          "text": "wolf",
+          "start": 42.9,
+          "end": 43.2,
+          "confidence": 0.985
+        },
+        {
+          "text": "is",
+          "start": 43.2,
+          "end": 43.44,
+          "confidence": 0.997
+        },
+        {
+          "text": "chasing",
+          "start": 43.44,
+          "end": 43.86,
+          "confidence": 0.997
+        },
+        {
+          "text": "the",
+          "start": 43.86,
+          "end": 44.22,
+          "confidence": 0.995
+        },
+        {
+          "text": "sheep.",
+          "start": 44.22,
+          "end": 44.54,
+          "confidence": 0.995
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "seek": 2896,
+      "start": 44.72,
+      "end": 50.24,
+      "text": " To his amusement, the villagers came running up the hill to scare the wolf away.",
+      "tokens": [
+        51171,
+        1407,
+        702,
+        39970,
+        11,
+        264,
+        32080,
+        1361,
+        2614,
+        493,
+        264,
+        10997,
+        281,
+        17185,
+        264,
+        19216,
+        1314,
+        13,
+        51469
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16937977927071707,
+      "compression_ratio": 1.6504424778761062,
+      "no_speech_prob": 0.08752601593732834,
+      "confidence": 0.995,
+      "words": [
+        {
+          "text": "To",
+          "start": 44.72,
+          "end": 45.28,
+          "confidence": 0.998
+        },
+        {
+          "text": "his",
+          "start": 45.28,
+          "end": 45.58,
+          "confidence": 0.999
+        },
+        {
+          "text": "amusement,",
+          "start": 45.58,
+          "end": 46.26,
+          "confidence": 0.983
+        },
+        {
+          "text": "the",
+          "start": 46.7,
+          "end": 46.88,
+          "confidence": 0.988
+        },
+        {
+          "text": "villagers",
+          "start": 46.88,
+          "end": 47.34,
+          "confidence": 0.987
+        },
+        {
+          "text": "came",
+          "start": 47.34,
+          "end": 47.68,
+          "confidence": 0.999
+        },
+        {
+          "text": "running",
+          "start": 47.68,
+          "end": 48.02,
+          "confidence": 0.999
+        },
+        {
+          "text": "up",
+          "start": 48.02,
+          "end": 48.26,
+          "confidence": 0.999
+        },
+        {
+          "text": "the",
+          "start": 48.26,
+          "end": 48.5,
+          "confidence": 0.998
+        },
+        {
+          "text": "hill",
+          "start": 48.5,
+          "end": 48.64,
+          "confidence": 0.999
+        },
+        {
+          "text": "to",
+          "start": 48.64,
+          "end": 48.9,
+          "confidence": 0.996
+        },
+        {
+          "text": "scare",
+          "start": 48.9,
+          "end": 49.18,
+          "confidence": 0.998
+        },
+        {
+          "text": "the",
+          "start": 49.18,
+          "end": 49.42,
+          "confidence": 0.997
+        },
+        {
+          "text": "wolf",
+          "start": 49.42,
+          "end": 49.7,
+          "confidence": 0.993
+        },
+        {
+          "text": "away.",
+          "start": 49.7,
+          "end": 50.24,
+          "confidence": 0.998
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "seek": 2896,
+      "start": 50.88,
+      "end": 57.36,
+      "text": " As they saw there was no wolf, they said strictly, Save your frightened cry for when there really",
+      "tokens": [
+        51469,
+        1018,
+        436,
+        1866,
+        456,
+        390,
+        572,
+        19216,
+        11,
+        436,
+        848,
+        20792,
+        11,
+        15541,
+        428,
+        28839,
+        3305,
+        337,
+        562,
+        456,
+        534,
+        51782
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16937977927071707,
+      "compression_ratio": 1.6504424778761062,
+      "no_speech_prob": 0.08752601593732834,
+      "confidence": 0.969,
+      "words": [
+        {
+          "text": "As",
+          "start": 50.88,
+          "end": 51.16,
+          "confidence": 0.997
+        },
+        {
+          "text": "they",
+          "start": 51.16,
+          "end": 51.38,
+          "confidence": 0.999
+        },
+        {
+          "text": "saw",
+          "start": 51.38,
+          "end": 51.64,
+          "confidence": 0.999
+        },
+        {
+          "text": "there",
+          "start": 51.64,
+          "end": 51.88,
+          "confidence": 0.989
+        },
+        {
+          "text": "was",
+          "start": 51.88,
+          "end": 52.14,
+          "confidence": 1.0
+        },
+        {
+          "text": "no",
+          "start": 52.14,
+          "end": 52.42,
+          "confidence": 0.999
+        },
+        {
+          "text": "wolf,",
+          "start": 52.42,
+          "end": 52.8,
+          "confidence": 0.992
+        },
+        {
+          "text": "they",
+          "start": 53.24,
+          "end": 53.54,
+          "confidence": 0.994
+        },
+        {
+          "text": "said",
+          "start": 53.54,
+          "end": 53.9,
+          "confidence": 0.999
+        },
+        {
+          "text": "strictly,",
+          "start": 53.9,
+          "end": 54.52,
+          "confidence": 0.984
+        },
+        {
+          "text": "Save",
+          "start": 54.98,
+          "end": 55.28,
+          "confidence": 0.639
+        },
+        {
+          "text": "your",
+          "start": 55.28,
+          "end": 55.52,
+          "confidence": 0.995
+        },
+        {
+          "text": "frightened",
+          "start": 55.52,
+          "end": 56.02,
+          "confidence": 0.994
+        },
+        {
+          "text": "cry",
+          "start": 56.02,
+          "end": 56.36,
+          "confidence": 0.995
+        },
+        {
+          "text": "for",
+          "start": 56.36,
+          "end": 56.62,
+          "confidence": 0.963
+        },
+        {
+          "text": "when",
+          "start": 56.62,
+          "end": 56.82,
+          "confidence": 0.996
+        },
+        {
+          "text": "there",
+          "start": 56.82,
+          "end": 57.1,
+          "confidence": 0.987
+        },
+        {
+          "text": "really",
+          "start": 57.1,
+          "end": 57.36,
+          "confidence": 0.992
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "seek": 5732,
+      "start": 57.36,
+      "end": 58.24,
+      "text": " is a wolf.",
+      "tokens": [
+        50364,
+        307,
+        257,
+        19216,
+        13,
+        50450
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.99,
+      "words": [
+        {
+          "text": "is",
+          "start": 57.36,
+          "end": 57.66,
+          "confidence": 0.989
+        },
+        {
+          "text": "a",
+          "start": 57.66,
+          "end": 57.86,
+          "confidence": 0.994
+        },
+        {
+          "text": "wolf.",
+          "start": 57.86,
+          "end": 58.24,
+          "confidence": 0.986
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "seek": 5732,
+      "start": 58.6,
+      "end": 61.92,
+      "text": " Don't cry, Wolf, when there is no wolf.",
+      "tokens": [
+        50450,
+        1468,
+        380,
+        3305,
+        11,
+        16634,
+        11,
+        562,
+        456,
+        307,
+        572,
+        19216,
+        13,
+        50627
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.956,
+      "words": [
+        {
+          "text": "Don't",
+          "start": 58.6,
+          "end": 59.2,
+          "confidence": 0.994
+        },
+        {
+          "text": "cry,",
+          "start": 59.2,
+          "end": 59.62,
+          "confidence": 0.984
+        },
+        {
+          "text": "Wolf,",
+          "start": 59.9,
+          "end": 60.26,
+          "confidence": 0.767
+        },
+        {
+          "text": "when",
+          "start": 60.58,
+          "end": 60.76,
+          "confidence": 0.975
+        },
+        {
+          "text": "there",
+          "start": 60.76,
+          "end": 61.02,
+          "confidence": 0.998
+        },
+        {
+          "text": "is",
+          "start": 61.02,
+          "end": 61.24,
+          "confidence": 0.994
+        },
+        {
+          "text": "no",
+          "start": 61.24,
+          "end": 61.46,
+          "confidence": 0.998
+        },
+        {
+          "text": "wolf.",
+          "start": 61.46,
+          "end": 61.92,
+          "confidence": 0.923
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "seek": 5732,
+      "start": 62.34,
+      "end": 67.98,
+      "text": " But the boy grinned at their words while they walked, grumbling down the hill once more.",
+      "tokens": [
+        50627,
+        583,
+        264,
+        3237,
+        677,
+        45508,
+        412,
+        641,
+        2283,
+        1339,
+        436,
+        7628,
+        11,
+        677,
+        14188,
+        760,
+        264,
+        10997,
+        1564,
+        544,
+        13,
+        50922
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.983,
+      "words": [
+        {
+          "text": "But",
+          "start": 62.34,
+          "end": 62.72,
+          "confidence": 0.996
+        },
+        {
+          "text": "the",
+          "start": 62.72,
+          "end": 62.9,
+          "confidence": 0.996
+        },
+        {
+          "text": "boy",
+          "start": 62.9,
+          "end": 63.14,
+          "confidence": 0.992
+        },
+        {
+          "text": "grinned",
+          "start": 63.14,
+          "end": 63.58,
+          "confidence": 0.969
+        },
+        {
+          "text": "at",
+          "start": 63.58,
+          "end": 63.76,
+          "confidence": 0.998
+        },
+        {
+          "text": "their",
+          "start": 63.76,
+          "end": 63.94,
+          "confidence": 0.997
+        },
+        {
+          "text": "words",
+          "start": 63.94,
+          "end": 64.28,
+          "confidence": 0.999
+        },
+        {
+          "text": "while",
+          "start": 64.28,
+          "end": 64.58,
+          "confidence": 0.987
+        },
+        {
+          "text": "they",
+          "start": 64.58,
+          "end": 64.8,
+          "confidence": 0.998
+        },
+        {
+          "text": "walked,",
+          "start": 64.8,
+          "end": 65.26,
+          "confidence": 0.998
+        },
+        {
+          "text": "grumbling",
+          "start": 65.78,
+          "end": 66.26,
+          "confidence": 0.914
+        },
+        {
+          "text": "down",
+          "start": 66.26,
+          "end": 66.7,
+          "confidence": 0.995
+        },
+        {
+          "text": "the",
+          "start": 66.7,
+          "end": 66.96,
+          "confidence": 0.996
+        },
+        {
+          "text": "hill",
+          "start": 66.96,
+          "end": 67.14,
+          "confidence": 0.998
+        },
+        {
+          "text": "once",
+          "start": 67.14,
+          "end": 67.6,
+          "confidence": 0.989
+        },
+        {
+          "text": "more.",
+          "start": 67.6,
+          "end": 67.98,
+          "confidence": 0.986
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "seek": 5732,
+      "start": 68.38,
+      "end": 72.5,
+      "text": " The last time, a real wolf came and wanted to eat his sheep.",
+      "tokens": [
+        50922,
+        440,
+        1036,
+        565,
+        11,
+        257,
+        957,
+        19216,
+        1361,
+        293,
+        1415,
+        281,
+        1862,
+        702,
+        14213,
+        13,
+        51150
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.996,
+      "words": [
+        {
+          "text": "The",
+          "start": 68.38,
+          "end": 68.68,
+          "confidence": 0.998
+        },
+        {
+          "text": "last",
+          "start": 68.68,
+          "end": 69.12,
+          "confidence": 0.997
+        },
+        {
+          "text": "time,",
+          "start": 69.12,
+          "end": 69.52,
+          "confidence": 1.0
+        },
+        {
+          "text": "a",
+          "start": 69.78,
+          "end": 69.94,
+          "confidence": 0.992
+        },
+        {
+          "text": "real",
+          "start": 69.94,
+          "end": 70.28,
+          "confidence": 0.995
+        },
+        {
+          "text": "wolf",
+          "start": 70.28,
+          "end": 70.52,
+          "confidence": 0.984
+        },
+        {
+          "text": "came",
+          "start": 70.52,
+          "end": 70.86,
+          "confidence": 0.999
+        },
+        {
+          "text": "and",
+          "start": 70.86,
+          "end": 71.1,
+          "confidence": 0.994
+        },
+        {
+          "text": "wanted",
+          "start": 71.1,
+          "end": 71.42,
+          "confidence": 0.998
+        },
+        {
+          "text": "to",
+          "start": 71.42,
+          "end": 71.66,
+          "confidence": 0.999
+        },
+        {
+          "text": "eat",
+          "start": 71.66,
+          "end": 71.88,
+          "confidence": 0.999
+        },
+        {
+          "text": "his",
+          "start": 71.88,
+          "end": 72.1,
+          "confidence": 0.997
+        },
+        {
+          "text": "sheep.",
+          "start": 72.1,
+          "end": 72.5,
+          "confidence": 0.995
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "seek": 5732,
+      "start": 72.96,
+      "end": 75.01,
+      "text": " The boy said help, help.",
+      "tokens": [
+        51150,
+        440,
+        3237,
+        848,
+        854,
+        11,
+        854,
+        13,
+        51272
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.83,
+      "words": [
+        {
+          "text": "The",
+          "start": 72.96,
+          "end": 73.2,
+          "confidence": 0.997
+        },
+        {
+          "text": "boy",
+          "start": 73.2,
+          "end": 73.48,
+          "confidence": 0.987
+        },
+        {
+          "text": "said",
+          "start": 73.48,
+          "end": 73.82,
+          "confidence": 0.999
+        },
+        {
+          "text": "help,",
+          "start": 73.82,
+          "end": 74.36,
+          "confidence": 0.435
+        },
+        {
+          "text": "help.",
+          "start": 74.64,
+          "end": 75.01,
+          "confidence": 0.919
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "seek": 5732,
+      "start": 75.01,
+      "end": 77.46,
+      "text": " But the people did not listen to him.",
+      "tokens": [
+        51272,
+        583,
+        264,
+        561,
+        630,
+        406,
+        2140,
+        281,
+        796,
+        13,
+        51398
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.998,
+      "words": [
+        {
+          "text": "But",
+          "start": 75.01,
+          "end": 75.6,
+          "confidence": 0.996
+        },
+        {
+          "text": "the",
+          "start": 75.6,
+          "end": 75.76,
+          "confidence": 0.996
+        },
+        {
+          "text": "people",
+          "start": 75.76,
+          "end": 76.08,
+          "confidence": 0.999
+        },
+        {
+          "text": "did",
+          "start": 76.08,
+          "end": 76.42,
+          "confidence": 0.995
+        },
+        {
+          "text": "not",
+          "start": 76.42,
+          "end": 76.6,
+          "confidence": 1.0
+        },
+        {
+          "text": "listen",
+          "start": 76.6,
+          "end": 76.96,
+          "confidence": 0.997
+        },
+        {
+          "text": "to",
+          "start": 76.96,
+          "end": 77.18,
+          "confidence": 0.999
+        },
+        {
+          "text": "him.",
+          "start": 77.18,
+          "end": 77.46,
+          "confidence": 0.999
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "seek": 5732,
+      "start": 77.88,
+      "end": 79.8,
+      "text": " They thought he was lying again.",
+      "tokens": [
+        51398,
+        814,
+        1194,
+        415,
+        390,
+        8493,
+        797,
+        13,
+        51514
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.998,
+      "words": [
+        {
+          "text": "They",
+          "start": 77.88,
+          "end": 78.16,
+          "confidence": 0.996
+        },
+        {
+          "text": "thought",
+          "start": 78.16,
+          "end": 78.48,
+          "confidence": 0.998
+        },
+        {
+          "text": "he",
+          "start": 78.48,
+          "end": 78.7,
+          "confidence": 0.998
+        },
+        {
+          "text": "was",
+          "start": 78.7,
+          "end": 78.94,
+          "confidence": 1.0
+        },
+        {
+          "text": "lying",
+          "start": 78.94,
+          "end": 79.24,
+          "confidence": 0.999
+        },
+        {
+          "text": "again.",
+          "start": 79.24,
+          "end": 79.8,
+          "confidence": 0.998
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "seek": 5732,
+      "start": 80.12,
+      "end": 82.82,
+      "text": " They did not help him and he lost his sheep.",
+      "tokens": [
+        51514,
+        814,
+        630,
+        406,
+        854,
+        796,
+        293,
+        415,
+        2731,
+        702,
+        14213,
+        13,
+        51720
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.15120807203274328,
+      "compression_ratio": 1.6473429951690821,
+      "no_speech_prob": 0.07803545892238617,
+      "confidence": 0.993,
+      "words": [
+        {
+          "text": "They",
+          "start": 80.12,
+          "end": 80.48,
+          "confidence": 0.995
+        },
+        {
+          "text": "did",
+          "start": 80.48,
+          "end": 80.8,
+          "confidence": 0.998
+        },
+        {
+          "text": "not",
+          "start": 80.8,
+          "end": 80.98,
+          "confidence": 1.0
+        },
+        {
+          "text": "help",
+          "start": 80.98,
+          "end": 81.28,
+          "confidence": 0.999
+        },
+        {
+          "text": "him",
+          "start": 81.28,
+          "end": 81.5,
+          "confidence": 0.999
+        },
+        {
+          "text": "and",
+          "start": 81.5,
+          "end": 81.7,
+          "confidence": 0.952
+        },
+        {
+          "text": "he",
+          "start": 81.7,
+          "end": 81.88,
+          "confidence": 0.998
+        },
+        {
+          "text": "lost",
+          "start": 81.88,
+          "end": 82.16,
+          "confidence": 0.999
+        },
+        {
+          "text": "his",
+          "start": 82.16,
+          "end": 82.4,
+          "confidence": 0.999
+        },
+        {
+          "text": "sheep.",
+          "start": 82.4,
+          "end": 82.82,
+          "confidence": 0.996
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "seek": 8444,
+      "start": 84.44,
+      "end": 89.33,
+      "text": " The story ends with an old man telling the boy that lying is bad and people will not",
+      "tokens": [
+        50364,
+        440,
+        1657,
+        5314,
+        365,
+        364,
+        1331,
+        587,
+        3585,
+        264,
+        3237,
+        300,
+        8493,
+        307,
+        1578,
+        293,
+        561,
+        486,
+        406,
+        50603
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.13519885622221847,
+      "compression_ratio": 1.4722222222222223,
+      "no_speech_prob": 0.2383318692445755,
+      "confidence": 0.993,
+      "words": [
+        {
+          "text": "The",
+          "start": 84.44,
+          "end": 84.66,
+          "confidence": 0.992
+        },
+        {
+          "text": "story",
+          "start": 84.66,
+          "end": 84.96,
+          "confidence": 0.987
+        },
+        {
+          "text": "ends",
+          "start": 84.96,
+          "end": 85.32,
+          "confidence": 0.997
+        },
+        {
+          "text": "with",
+          "start": 85.32,
+          "end": 85.54,
+          "confidence": 0.998
+        },
+        {
+          "text": "an",
+          "start": 85.54,
+          "end": 85.7,
+          "confidence": 0.996
+        },
+        {
+          "text": "old",
+          "start": 85.7,
+          "end": 86.02,
+          "confidence": 0.997
+        },
+        {
+          "text": "man",
+          "start": 86.02,
+          "end": 86.3,
+          "confidence": 0.999
+        },
+        {
+          "text": "telling",
+          "start": 86.3,
+          "end": 86.62,
+          "confidence": 0.995
+        },
+        {
+          "text": "the",
+          "start": 86.62,
+          "end": 86.94,
+          "confidence": 0.997
+        },
+        {
+          "text": "boy",
+          "start": 86.94,
+          "end": 87.14,
+          "confidence": 0.992
+        },
+        {
+          "text": "that",
+          "start": 87.14,
+          "end": 87.4,
+          "confidence": 0.989
+        },
+        {
+          "text": "lying",
+          "start": 87.4,
+          "end": 87.68,
+          "confidence": 0.977
+        },
+        {
+          "text": "is",
+          "start": 87.68,
+          "end": 87.96,
+          "confidence": 0.997
+        },
+        {
+          "text": "bad",
+          "start": 87.96,
+          "end": 88.28,
+          "confidence": 0.997
+        },
+        {
+          "text": "and",
+          "start": 88.28,
+          "end": 88.5,
+          "confidence": 0.977
+        },
+        {
+          "text": "people",
+          "start": 88.5,
+          "end": 88.84,
+          "confidence": 0.995
+        },
+        {
+          "text": "will",
+          "start": 88.84,
+          "end": 89.12,
+          "confidence": 0.996
+        },
+        {
+          "text": "not",
+          "start": 89.12,
+          "end": 89.33,
+          "confidence": 0.997
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "seek": 8444,
+      "start": 89.33,
+      "end": 91.64,
+      "text": " trust you if you lie.",
+      "tokens": [
+        50603,
+        3361,
+        291,
+        498,
+        291,
+        4544,
+        13,
+        50744
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.13519885622221847,
+      "compression_ratio": 1.4722222222222223,
+      "no_speech_prob": 0.2383318692445755,
+      "confidence": 0.948,
+      "words": [
+        {
+          "text": "trust",
+          "start": 89.33,
+          "end": 89.74,
+          "confidence": 0.999
+        },
+        {
+          "text": "you",
+          "start": 89.74,
+          "end": 90.0,
+          "confidence": 0.997
+        },
+        {
+          "text": "if",
+          "start": 90.0,
+          "end": 90.38,
+          "confidence": 0.966
+        },
+        {
+          "text": "you",
+          "start": 90.38,
+          "end": 91.26,
+          "confidence": 0.803
+        },
+        {
+          "text": "lie.",
+          "start": 91.26,
+          "end": 91.64,
+          "confidence": 0.989
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "seek": 8444,
+      "start": 92.02,
+      "end": 95.16,
+      "text": " The moral of the story is, lying breaks trust.",
+      "tokens": [
+        50744,
+        440,
+        9723,
+        295,
+        264,
+        1657,
+        307,
+        11,
+        8493,
+        9857,
+        3361,
+        13,
+        50930
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.13519885622221847,
+      "compression_ratio": 1.4722222222222223,
+      "no_speech_prob": 0.2383318692445755,
+      "confidence": 0.971,
+      "words": [
+        {
+          "text": "The",
+          "start": 92.02,
+          "end": 92.2,
+          "confidence": 0.995
+        },
+        {
+          "text": "moral",
+          "start": 92.2,
+          "end": 92.52,
+          "confidence": 0.988
+        },
+        {
+          "text": "of",
+          "start": 92.52,
+          "end": 92.78,
+          "confidence": 1.0
+        },
+        {
+          "text": "the",
+          "start": 92.78,
+          "end": 92.96,
+          "confidence": 0.993
+        },
+        {
+          "text": "story",
+          "start": 92.96,
+          "end": 93.32,
+          "confidence": 0.999
+        },
+        {
+          "text": "is,",
+          "start": 93.32,
+          "end": 93.72,
+          "confidence": 0.999
+        },
+        {
+          "text": "lying",
+          "start": 93.92,
+          "end": 94.16,
+          "confidence": 0.792
+        },
+        {
+          "text": "breaks",
+          "start": 94.16,
+          "end": 94.6,
+          "confidence": 0.996
+        },
+        {
+          "text": "trust.",
+          "start": 94.6,
+          "end": 95.16,
+          "confidence": 0.999
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "seek": 8444,
+      "start": 95.66,
+      "end": 99.42,
+      "text": " And no one believes a liar, even when they tell the truth.",
+      "tokens": [
+        50930,
+        400,
+        572,
+        472,
+        12307,
+        257,
+        27323,
+        11,
+        754,
+        562,
+        436,
+        980,
+        264,
+        3494,
+        13,
+        51114
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.13519885622221847,
+      "compression_ratio": 1.4722222222222223,
+      "no_speech_prob": 0.2383318692445755,
+      "confidence": 0.992,
+      "words": [
+        {
+          "text": "And",
+          "start": 95.66,
+          "end": 95.96,
+          "confidence": 0.985
+        },
+        {
+          "text": "no",
+          "start": 95.96,
+          "end": 96.14,
+          "confidence": 0.986
+        },
+        {
+          "text": "one",
+          "start": 96.14,
+          "end": 96.32,
+          "confidence": 0.981
+        },
+        {
+          "text": "believes",
+          "start": 96.32,
+          "end": 96.84,
+          "confidence": 0.994
+        },
+        {
+          "text": "a",
+          "start": 96.84,
+          "end": 97.08,
+          "confidence": 0.988
+        },
+        {
+          "text": "liar,",
+          "start": 97.08,
+          "end": 97.4,
+          "confidence": 0.998
+        },
+        {
+          "text": "even",
+          "start": 97.84,
+          "end": 98.2,
+          "confidence": 0.989
+        },
+        {
+          "text": "when",
+          "start": 98.2,
+          "end": 98.46,
+          "confidence": 0.996
+        },
+        {
+          "text": "they",
+          "start": 98.46,
+          "end": 98.66,
+          "confidence": 0.999
+        },
+        {
+          "text": "tell",
+          "start": 98.66,
+          "end": 98.92,
+          "confidence": 0.998
+        },
+        {
+          "text": "the",
+          "start": 98.92,
+          "end": 99.1,
+          "confidence": 0.997
+        },
+        {
+          "text": "truth.",
+          "start": 99.1,
+          "end": 99.42,
+          "confidence": 0.999
+        }
+      ]
+    }
+  ],
+  "language": "en"
+}

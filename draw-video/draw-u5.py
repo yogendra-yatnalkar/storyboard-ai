@@ -96,7 +96,7 @@ def draw_hand_on_img(
 
 # constants
 img_dir = "./images"
-img_name = "4.png"
+img_name = "2.png"
 
 hand_path = "./images/drawing-hand.png"
 hand_mask_path = "./images/hand-mask.png"
@@ -274,14 +274,14 @@ for object in object_masks['shapes']:
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    draw_masked_object(object_mask = object_mask, skip_rate = 15)
+    draw_masked_object(object_mask = object_mask, skip_rate = 5)
 
 # cv2.imshow("background_mask", background_mask)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 
 # now draw the last remaing background part
-draw_masked_object(object_mask = background_mask)
+draw_masked_object(object_mask = background_mask, skip_rate = 10)
 
 img_gray_to_3_channel = img.copy()
 for i in range(frame_rate*5):

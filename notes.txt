@@ -1,0 +1,89 @@
+rm 
+torch-model-archiver --model-name mnist --version 1.0 --serialized-file mnist_cnn.pt --handler mnist_handler.py
+mv -Force mnist.mar ./model_store
+torchserve --start --model-store ./model_store --models mnist=mnist.mar --ts-config config.properties
+
+
+ ls .\tts\saved_audios\1.mp3
+ ls .\draw-video\save_videos\1-u5.mp4
+
+ffprobe -i .\tts\saved_audios\2.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\2-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+ffprobe -i .\tts\saved_audios\2.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\2-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+ffprobe -i .\tts\saved_audios\3.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\3-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+ffprobe -i .\tts\saved_audios\4.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\4-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+
+# when audio is bigger
+ffmpeg -i .\draw-video\save_videos\2-u5.mp4 -i .\tts\saved_audios\2.mp3 -map 0:v -map 1:a -c:v copy -c:a copy 2-audio-video.mp4
+
+# When video is bigger
+ffmpeg -i .\draw-video\save_videos\1-u5.mp4 -i .\tts\saved_audios\1.mp3 -map 0:v -map 1:a -c:v copy -filter_complex "[1:0]apad=pad_dur=1.19" 1-audio-video.mp4
+
+ffmpeg -i .\draw-video\save_videos\3-u5.mp4 -i .\tts\saved_audios\3.mp3 -map 0:v -map 1:a -c:v copy -filter_complex "[1:0]apad=pad_dur=1" 3-audio-video.mp4
+
+ffmpeg -i .\draw-video\save_videos\4-u5.mp4 -i .\tts\saved_audios\4.mp3 -map 0:v -map 1:a -c:v copy -filter_complex "[1:0]apad=pad_dur=5" 4-audio-video.mp4
+
+
+# concatinate everything
+ffmpeg -i "concat:1-audio-video.mp4|2-audio-video.mp4|3-audio-video.mp4|4-audio-video.mp4" -codec copy end-to-end-story.mp4
+
+ffmpeg -f concat -safe 0 -i video_list.txt -c copy output.mp4
+
+
+
+# updated ffmpeg
+rm 
+torch-model-archiver --model-name mnist --version 1.0 --serialized-file mnist_cnn.pt --handler mnist_handler.py
+mv -Force mnist.mar ./model_store
+torchserve --start --model-store ./model_store --models mnist=mnist.mar --ts-config config.properties
+
+
+ ls .\tts\saved_audios\1.mp3
+ ls .\draw-video\save_videos\1-u5.mp4
+
+ffprobe -i .\tts\saved_audios\2.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\2-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+ffprobe -i .\tts\saved_audios\2.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\2-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+ffprobe -i .\tts\saved_audios\3.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\3-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+ffprobe -i .\tts\saved_audios\4.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i .\draw-video\save_videos\4-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
+
+
+# when audio is bigger
+ffmpeg -i .\draw-video\save_videos\2-u5.mp4 -i .\tts\saved_audios\2.mp3 -map 0:v -map 1:a -c:v copy -c:a copy 2-audio-video.mp4
+
+# When video is bigger
+ffmpeg -i .\draw-video\save_videos\1-u5.mp4 -i .\tts\saved_audios\1.mp3 -map 0:v -map 1:a -c:v copy -filter_complex "[1:0]apad=pad_dur=1.19" 1-audio-video.mp4
+
+ffmpeg -i .\draw-video\save_videos\3-u5.mp4 -i .\tts\saved_audios\3.mp3 -map 0:v -map 1:a -c:v copy -filter_complex "[1:0]apad=pad_dur=1" 3-audio-video.mp4
+
+ffmpeg -i .\draw-video\save_videos\4-u5.mp4 -i .\tts\saved_audios\4.mp3 -map 0:v -map 1:a -c:v copy -filter_complex "[1:0]apad=pad_dur=5" 4-audio-video.mp4
+
+
+# concatinate everything
+ffmpeg -f concat -safe 0 -i video_list.txt -c copy output.mp4
+
+
+# extracting audio
+ ffmpeg -i output-25-fps.mp4 -map 0:a output-audio.mp4
+ ffmpeg -i output-25-fps.mp4 -map 0:a output-audio.wav
+
+# updated ffmpeg
+ffmpeg -y -i 1-audio-video.mp4 -r 25 updated-1-audio-video.mp4
+ffmpeg -y -i 2-audio-video.mp4 -r 25 updated-2-audio-video.mp4
+ffmpeg -y -i 3-audio-video.mp4 -r 25 updated-3-audio-video.mp4
+ffmpeg -y -i 4-audio-video.mp4 -r 25 updated-4-audio-video.mp4
+
+

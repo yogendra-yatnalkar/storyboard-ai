@@ -14,7 +14,7 @@ width = data["imageWidth"]
 # Create an empty mask array
 mask = np.zeros((height, width), dtype=np.uint8)
 
-# Loop through the shapes in the json file
+# Loop through the shapes in the json file       
 for shape in data["shapes"]:
     # Check if the shape label matches the desired label
     if shape["label"] == "0":
