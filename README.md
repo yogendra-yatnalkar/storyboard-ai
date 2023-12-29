@@ -2,11 +2,10 @@
 
 ## AI Generated: The Story of Shepherd Boy And The Wolf
 
-### This code is under active development. Sorry, I am still under the process of cleaning and re-structuring the codebase 
+> ### This code is under active development. Sorry, I am still under the process of cleaning and re-structuring the codebase 
 
-[![Alt text](https://img.youtube.com/vi/https://www.youtube.com/watch?v=iSb1HJXRO04 
-/0.jpg)](https://www.youtube.com/watch?v=https://www.youtube.com/watch?v=iSb1HJXRO04 
-)
+[![https://www.youtube.com/watch?v=iSb1HJXRO04](https://img.youtube.com/vi/iSb1HJXRO04/0.jpg)](https://www.youtube.com/watch?v=iSb1HJXRO04)
+
 
 ### HOW THE VIDEO WAS MADE ? 
 
