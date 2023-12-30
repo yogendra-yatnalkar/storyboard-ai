@@ -1,12 +1,3 @@
-rm 
-torch-model-archiver --model-name mnist --version 1.0 --serialized-file mnist_cnn.pt --handler mnist_handler.py
-mv -Force mnist.mar ./model_store
-torchserve --start --model-store ./model_store --models mnist=mnist.mar --ts-config config.properties
-
-
- ls .\tts\saved_audios\1.mp3
- ls .\draw-video\save_videos\1-u5.mp4
-
 ffprobe -i .\tts\saved_audios\2.mp3 -show_entries format=duration -v quiet -of csv="p=0"
 ffprobe -i .\draw-video\save_videos\2-u5.mp4 -show_entries format=duration -v quiet -of csv="p=0"
 

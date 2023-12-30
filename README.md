@@ -2,7 +2,7 @@
 
 ## AI Generated: The Story of Shepherd Boy And The Wolf
 
-> **This code is under active development. Sorry, I am still under the process of cleaning and re-structuring the codebase**
+> **I am still under the process of cleaning and re-structuring the codebase**
 
 ---
 
@@ -20,3 +20,18 @@ https://www.youtube.com/watch?v=iSb1HJXRO04
 - The audio was generated using gTTS (Google Text-to-Speech)
 - The sub-titles were generated with the help of OpenAI whisper 
 - All the different audios, videos and subtitles were somehow synchronized using FFMPEG and OpenCV (This part gave a lot of pain🥲... ALL HAIL FFMPEG🙌)
+
+
+---
+
+### Code Structure: 
+
+- **text-processing**: 
+    - **story.txt**: The story has been taken from internet
+    - **summary.txt**: The 4 line summary was generated using chatGPT (for the story present in story.txt)
+- **generate-whiteboard-animated-videos**: 
+    - Convert any image to white-board animations video
+    - If object masks are provided in JSON formats, they will be automatically considered while drawing 
+    - **Code File:** draw-whiteboard-animations.py
+- **tts (text to speech)**:
+    - The story is devided into 4 parts in correspondance to the summary. For each story part, google's text-2-speec used to generate 4 mp3 files. 

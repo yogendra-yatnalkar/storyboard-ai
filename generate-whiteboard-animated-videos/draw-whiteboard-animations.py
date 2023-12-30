@@ -261,7 +261,7 @@ class AllVariables:
 if __name__ == "__main__":
     # paths and dir
     img_dir = "./images"
-    img_name = "2.png"
+    img_name = "1.png"
     hand_path = "./images/drawing-hand.png"
     hand_mask_path = "./images/hand-mask.png"
     img_path = os.path.join(img_dir, img_name)
