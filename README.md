@@ -35,3 +35,17 @@ https://www.youtube.com/watch?v=iSb1HJXRO04
     - **Code File:** draw-whiteboard-animations.py
 - **tts (text to speech)**:
     - The story is devided into 4 parts in correspondance to the summary. For each story part, google's text-2-speec used to generate 4 mp3 files. 
+
+---
+
+## Sam assisted mask generation:
+
+- The whiteboard animation is refined by drawing one object at a time. 
+- These object masks are drawn/created using **Meta-AI SAM** assisted tagging tool named: **Anylabeling** 
+- **Anylabeling Tool**: https://github.com/vietanhdev/anylabeling 
+- Post tagging, the tool returns a JSON output which can be used for sketching video generation 
+
+```
+Please NOTE:
+- The videos can also be generated using without the JSON masks 
+```
