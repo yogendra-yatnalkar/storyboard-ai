@@ -6,6 +6,19 @@
 
 ---
 
+### Turning this into a product
+
+Work is underway to turn this research pipeline into a SaaS for solo content creators - story text
+in, narrated whiteboard video out.
+
+- [`docs/product-plan.md`](docs/product-plan.md) - product definition, decisions, phased roadmap
+- [`docs/architecture.md`](docs/architecture.md) - system design and the parity constraints
+- [`docs/cost-model.md`](docs/cost-model.md) - per-video COGS and pricing analysis
+- [`prototype/README.md`](prototype/README.md) - Remotion port, **pixel-identical** to the
+  renderer below, plus how to reproduce that result
+
+---
+
 https://www.youtube.com/watch?v=iSb1HJXRO04  
 [![https://www.youtube.com/watch?v=iSb1HJXRO04](https://img.youtube.com/vi/iSb1HJXRO04/0.jpg)](https://www.youtube.com/watch?v=iSb1HJXRO04)
 

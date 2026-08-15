@@ -65,20 +65,21 @@ while True:
     # Get the height and width of the frame
     height, width = frame.shape[:2]
 
-    # Calculate the text size and position
-    text_size = cv2.getTextSize(text, font, 0.7, 1)[0]
-    # print(text_size, counter, "=== ", counter/25, text)
-
-    text_x = (width - text_size[0]) // 2
-    text_y = height - 50
-
-    # Calculate the rectangle size and position
-    rect_x = text_x - 20
-    rect_y = text_y - 20
-    rect_w = text_size[0] + 14
-    rect_h = text_size[1] + 14
-
+    # text is None in the gaps between subtitle segments, and getTextSize
+    # cannot be called on None - so size and draw only when there is text
     if text is not None:
+        # Calculate the text size and position
+        text_size = cv2.getTextSize(text, font, 0.7, 1)[0]
+
+        text_x = (width - text_size[0]) // 2
+        text_y = height - 50
+
+        # Calculate the rectangle size and position
+        rect_x = text_x - 20
+        rect_y = text_y - 20
+        rect_w = text_size[0] + 14
+        rect_h = text_size[1] + 14
+
         # Draw a yellow filled rectangle behind the text
         cv2.rectangle(frame, (rect_x, rect_y), (rect_x + rect_w, rect_y + rect_h), (0, 255, 255), -1)
 
