@@ -76,31 +76,30 @@ enough on generated art, dropping it is the single largest margin improvement av
 
 ## Phases 1-5
 
-Each phase is independently shippable, sized for nights-and-weekends work. If the scope needs
-cutting, cut from the end.
+See [status.md](status.md) for exactly what is built, stubbed and not started in each.
 
-**Phase 1 - Renderer productization.** Both aspect ratios with proper per-ratio layout rather
-than letterboxing; the masking decision applied; Remotion Player preview in the browser; audio and
-caption compositing (this replaces the whole of `ffmpeg-command-notes.txt`); watermark overlay for
-the free tier. Narration length drives the skip rate, so audio and video stay in sync by
-construction rather than by hand-tuned `apad` padding.
+**Phase 1 - Renderer productization - complete.** Narration-driven timing, multi-scene assembly
+with per-scene audio, captions in two styles, per-project aspect ratios, watermark and brand mark.
+`ffmpeg-command-notes.txt` is fully replaced: no `ffprobe`, no `apad`, no concat list. Every scene
+lands within one frame of its narration.
 
-**Phase 2 - Pipeline services.** Provider adapters for LLM, images, TTS and segmentation, each
-behind a narrow interface so the cheap-to-premium upsell is a config change. DeepSeek is the
-default LLM; the adapter exists because its API is China-hosted (a GDPR disclosure for EU users)
-and its rate limits are less predictable than the incumbents.
+**Phase 2 - Pipeline services - runs offline.** Provider adapters for LLM, images, TTS and
+segmentation behind narrow interfaces, so the cheap-to-premium upsell is a config change. Fixture
+providers run the whole pipeline with no API keys, which is how CI exercises it. Cost is measured
+per call rather than estimated - a fixture run reports $0.1899 for a four-scene video, confirming
+the estimate below. The live HTTP shapes are written but unverified against a specific vendor.
 
-**Phase 3 - Application.** Next.js on Vercel; Supabase for auth, Postgres and row-level security;
-Cloudflare R2 for rendered video (zero egress fees, which matters as soon as users start sharing);
-project CRUD, storyboard view, job queue, render status.
+**Phase 3 - Application - UI only.** Next.js app (projects, new video, project detail, pricing)
+plus a Supabase schema with RLS on every table and an atomic quota claim. Not yet wired together:
+the app reads demo data, and the migration has never been applied.
 
-**Phase 4 - Billing.** Paddle or Lemon Squeezy checkout, quota enforcement, tier gating. A
-merchant of record handles global VAT/GST registration and remittance, which is the largest
-operational burden of selling subscriptions worldwide from a small entity.
+**Phase 4 - Billing - logic complete.** Plans, quota gating and merchant-of-record webhook
+handling, tested. No provider account, no checkout, no endpoint mounted.
 
-**Phase 5 - v1 extras, in ascending cost order.** Brand kit (logo, colours, custom hand,
-intro/outro) → background music with ducking → multi-language output → direct publishing to
-YouTube/TikTok. Publishing is last because each integration needs OAuth and platform app review.
+**Phase 5 - v1 extras - partial.** Brand kit and watermark render. Music mixes at a fixed level but
+does not duck under narration, and no licensed library is sourced. Multi-language flows through the
+manifest but nothing translates. Publishing not started - it is last because each platform needs
+OAuth and app review.
 
 ## Risks
 

@@ -41,6 +41,21 @@ jobs:
         working-directory: prototype/remotion-renderer
         run: npm ci
 
+      - name: Install pipeline dependencies
+        working-directory: packages/pipeline
+        run: npm install --no-audit --no-fund
+
+      # Fast feedback before the expensive render steps.
+      - name: Unit tests
+        run: |
+          (cd prototype/remotion-renderer && npm run typecheck && npm test)
+          (cd packages/pipeline && npm run typecheck && npm test)
+
+      # Exercises generation end to end with fixture providers - no API keys.
+      - name: Generation pipeline (offline)
+        working-directory: packages/pipeline
+        run: npx tsx src/generate.ts --input "The boy who cried wolf" --out "$GITHUB_WORKSPACE/prototype/out/generated"
+
       - name: Render the Python reference
         run: |
           python prototype/reference/render.py \

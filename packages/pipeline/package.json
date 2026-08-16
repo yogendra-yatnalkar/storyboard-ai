@@ -1,0 +1,20 @@
+{
+  "name": "@storyboard-ai/pipeline",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Generation pipeline: story text -> render-ready scenes",
+  "scripts": {
+    "generate": "tsx src/generate.ts",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "music-metadata": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2"
+  }
+}

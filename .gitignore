@@ -142,3 +142,6 @@ prototype/remotion-renderer/public/precomputed/
 prototype/out/
 # Narration staged into public/ by scripts/buildVideo.ts
 prototype/remotion-renderer/public/audio/
+.next/
+out/
+*.tsbuildinfo
