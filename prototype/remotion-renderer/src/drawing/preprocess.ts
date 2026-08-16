@@ -98,6 +98,17 @@ export interface PreprocessResult {
 }
 
 /**
+ * How to fit source artwork into the render dimensions.
+ *
+ * "stretch" is what the reference does - a straight resize, correct when the
+ * source already has the target aspect ratio (as generated artwork will).
+ * "pad" preserves the aspect and fills the remainder with paper, which is what
+ * legacy square artwork needs in a 16:9 or 9:16 project; stretching it instead
+ * visibly distorts the drawing.
+ */
+export type FitMode = "stretch" | "pad";
+
+/**
  * Resize, grayscale and adaptively threshold the source image.
  *
  * NOTE: the reference computes a CLAHE-equalised image and then thresholds the
@@ -108,6 +119,7 @@ export function preprocessImage(
   image: RgbaImage,
   width: number,
   height: number,
+  fit: FitMode = "stretch",
 ): PreprocessResult {
   const cv = requireCv();
   const rgba = cv.matFromImageData({
@@ -120,7 +132,31 @@ export function preprocessImage(
   cv.cvtColor(rgba, rgb, cv.COLOR_RGBA2RGB);
 
   const resized = new cv.Mat();
-  cv.resize(rgb, resized, new cv.Size(width, height), 0, 0, cv.INTER_LINEAR);
+  if (fit === "pad" && image.width * height !== image.height * width) {
+    const scale = Math.min(width / image.width, height / image.height);
+    const innerWidth = Math.max(1, Math.round(image.width * scale));
+    const innerHeight = Math.max(1, Math.round(image.height * scale));
+
+    const inner = new cv.Mat();
+    cv.resize(rgb, inner, new cv.Size(innerWidth, innerHeight), 0, 0, cv.INTER_LINEAR);
+
+    // White padding, so the untouched area reads as paper rather than as a border.
+    const top = Math.floor((height - innerHeight) / 2);
+    const left = Math.floor((width - innerWidth) / 2);
+    cv.copyMakeBorder(
+      inner,
+      resized,
+      top,
+      height - innerHeight - top,
+      left,
+      width - innerWidth - left,
+      cv.BORDER_CONSTANT,
+      new cv.Scalar(255, 255, 255, 255),
+    );
+    inner.delete();
+  } else {
+    cv.resize(rgb, resized, new cv.Size(width, height), 0, 0, cv.INTER_LINEAR);
+  }
 
   const gray = new cv.Mat();
   cv.cvtColor(resized, gray, cv.COLOR_RGB2GRAY);
@@ -179,10 +215,20 @@ export function buildObjectMasks(
   sourceHeight: number,
   width: number,
   height: number,
+  fit: FitMode = "stretch",
 ): { objects: ObjectMask[]; background: Uint8Array } {
   const cv = requireCv();
   const background = new Uint8Array(width * height).fill(255);
   const objects: ObjectMask[] = [];
+
+  // Masks must undergo exactly the same geometry as the image, or every object
+  // is drawn in the wrong place.
+  const padded = fit === "pad" && sourceWidth * height !== sourceHeight * width;
+  const scale = Math.min(width / sourceWidth, height / sourceHeight);
+  const innerWidth = padded ? Math.max(1, Math.round(sourceWidth * scale)) : width;
+  const innerHeight = padded ? Math.max(1, Math.round(sourceHeight * scale)) : height;
+  const padTop = padded ? Math.floor((height - innerHeight) / 2) : 0;
+  const padLeft = padded ? Math.floor((width - innerWidth) / 2) : 0;
 
   file.shapes.forEach((shape, index) => {
     const mat = cv.Mat.zeros(sourceHeight, sourceWidth, cv.CV_8UC1);
@@ -199,7 +245,23 @@ export function buildObjectMasks(
     cv.fillPoly(mat, contours, new cv.Scalar(255));
 
     const resized = new cv.Mat();
-    cv.resize(mat, resized, new cv.Size(width, height), 0, 0, cv.INTER_LINEAR);
+    if (padded) {
+      const inner = new cv.Mat();
+      cv.resize(mat, inner, new cv.Size(innerWidth, innerHeight), 0, 0, cv.INTER_LINEAR);
+      cv.copyMakeBorder(
+        inner,
+        resized,
+        padTop,
+        height - innerHeight - padTop,
+        padLeft,
+        width - innerWidth - padLeft,
+        cv.BORDER_CONSTANT,
+        new cv.Scalar(0),
+      );
+      inner.delete();
+    } else {
+      cv.resize(mat, resized, new cv.Size(width, height), 0, 0, cv.INTER_LINEAR);
+    }
 
     const mask = Uint8Array.from(resized.data);
     for (let i = 0; i < mask.length; i++) {

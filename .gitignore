@@ -140,3 +140,5 @@ node_modules/
 prototype/remotion-renderer/public/precomputed/
 # Renders, sampled frames and parity reports
 prototype/out/
+# Narration staged into public/ by scripts/buildVideo.ts
+prototype/remotion-renderer/public/audio/

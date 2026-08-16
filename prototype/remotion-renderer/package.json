@@ -7,11 +7,15 @@
     "studio": "remotion studio",
     "precompute": "tsx scripts/precompute.ts",
     "compare": "tsx scripts/compare.ts",
-    "render": "remotion render"
+    "render": "remotion render",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "build-video": "tsx scripts/buildVideo.ts"
   },
   "dependencies": {
     "@remotion/cli": "4.0.416",
     "@techstark/opencv-js": "4.11.0-release.1",
+    "music-metadata": "^11.14.0",
     "pngjs": "7.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",

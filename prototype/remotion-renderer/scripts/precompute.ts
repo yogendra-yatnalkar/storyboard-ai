@@ -16,10 +16,11 @@
  *   hand.png           the drawing hand, cropped, with a real alpha channel
  *
  * With `cum-<i>` as a starting point, any frame in segment i+1 is one full-image
- * blit plus a bounded number of 10x10 tile blits. No history required.
+ * blit plus a bounded number of tile blits. No history required.
  *
  * Usage:
  *   tsx scripts/precompute.ts --image ../../path/2.png --mask ../../path/2.json --name scene-2
+ *   tsx scripts/precompute.ts --image in.png --name scene --narration 20.2   # narration-timed
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -33,44 +34,50 @@ import {
   readPng,
   writeGrayPng,
   writeRgbaPng,
+  type FitMode,
   type LabelmeFile,
 } from "../src/drawing/preprocess";
 import {
   computeTilePath,
   maskThreshold,
-  segmentFrameCount,
+  type Tile,
 } from "../src/drawing/tilePath";
 import {
   CONFIG,
+  assertGridFits,
   type PathManifest,
   type SegmentManifest,
 } from "../src/drawing/manifest";
+import { computeSceneTiming, type SegmentKind } from "../src/drawing/timing";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "../../..");
 
-function parseArgs() {
-  const args = new Map<string, string>();
-  for (let i = 2; i < process.argv.length; i += 2) {
-    args.set(process.argv[i].replace(/^--/, ""), process.argv[i + 1]);
-  }
-  const image = args.get("image");
-  if (!image) throw new Error("--image is required");
-  return {
-    image: resolve(process.cwd(), image),
-    mask: args.get("mask") ? resolve(process.cwd(), args.get("mask")!) : null,
-    name: args.get("name") ?? "scene",
-    hand: resolve(
-      process.cwd(),
-      args.get("hand") ??
-        `${REPO_ROOT}/generate-whiteboard-animated-videos/images/drawing-hand.png`,
-    ),
-    handMask: resolve(
-      process.cwd(),
-      args.get("hand-mask") ??
-        `${REPO_ROOT}/generate-whiteboard-animated-videos/images/hand-mask.png`,
-    ),
-  };
+export const DEFAULT_HAND = `${REPO_ROOT}/generate-whiteboard-animated-videos/images/drawing-hand.png`;
+export const DEFAULT_HAND_MASK = `${REPO_ROOT}/generate-whiteboard-animated-videos/images/hand-mask.png`;
+
+export interface PrecomputeOptions {
+  image: string;
+  mask?: string | null;
+  name: string;
+  width?: number;
+  height?: number;
+  /**
+   * Narration length in seconds. When supplied, drawing speed is solved for so
+   * the hand finishes with the voice. Omit to keep the reference's fixed skip
+   * rates - which is what the parity fixtures rely on.
+   */
+  narrationSeconds?: number | null;
+  hand?: string;
+  handMask?: string;
+  outDir?: string;
+  quiet?: boolean;
+  /**
+   * How to fit source artwork into the render size. Generated artwork already
+   * matches the project ratio ("stretch"); legacy square art in a non-square
+   * project must be padded or the drawing is visibly distorted.
+   */
+  fit?: FitMode;
 }
 
 /** Crop the hand to its mask's bounding box and turn the mask into an alpha channel. */
@@ -114,19 +121,44 @@ function buildHandSprite(handPath: string, handMaskPath: string) {
   return { sprite, width, height };
 }
 
-async function main() {
-  const { image, mask, name, hand, handMask } = parseArgs();
+interface Pass {
+  label: string;
+  kind: SegmentKind;
+  splitLen: number;
+  fixedSkipRate: number;
+  tiles: Tile[];
+  mask: Uint8Array | null;
+}
+
+export async function precomputeScene(options: PrecomputeOptions): Promise<PathManifest> {
+  const {
+    image,
+    mask = null,
+    name,
+    width = CONFIG.width,
+    height = CONFIG.height,
+    narrationSeconds = null,
+    hand = DEFAULT_HAND,
+    handMask = DEFAULT_HAND_MASK,
+    quiet = false,
+    fit = "stretch",
+  } = options;
+
   await openCvReady();
 
-  const outDir = resolve(HERE, `../public/precomputed/${name}`);
+  assertGridFits(width, height, [
+    CONFIG.splitLen,
+    CONFIG.backgroundSplitLen,
+    CONFIG.noMaskSplitLen,
+  ]);
+
+  const outDir = options.outDir ?? resolve(HERE, `../public/precomputed/${name}`);
   mkdirSync(outDir, { recursive: true });
 
   const png = readPng(image);
-  const pre = preprocessImage(png, CONFIG.width, CONFIG.height);
-  const { width, height } = pre;
+  const pre = preprocessImage(png, width, height, fit);
 
-  // --- segments -------------------------------------------------------------
-  type Pass = { segment: Omit<SegmentManifest, "startFrame">; mask: Uint8Array | null };
+  // --- passes ---------------------------------------------------------------
   const passes: Pass[] = [];
 
   if (mask) {
@@ -137,64 +169,67 @@ async function main() {
       pre.sourceHeight,
       width,
       height,
+      fit,
     );
 
     for (const object of objects) {
-      const tiles = computeTilePath(pre.threshold, object.mask, {
-        width,
-        height,
-        splitLen: CONFIG.splitLen,
-        blackPixelThreshold: CONFIG.blackPixelThreshold,
-      });
       passes.push({
-        segment: {
-          label: object.label,
-          kind: "object",
+        label: object.label,
+        kind: "object",
+        splitLen: CONFIG.splitLen,
+        fixedSkipRate: CONFIG.objectSkipRate,
+        tiles: computeTilePath(pre.threshold, object.mask, {
+          width,
+          height,
           splitLen: CONFIG.splitLen,
-          skipRate: CONFIG.objectSkipRate,
-          tiles,
-          frameCount: segmentFrameCount(tiles.length, CONFIG.objectSkipRate),
-        },
+          blackPixelThreshold: CONFIG.blackPixelThreshold,
+        }),
         mask: object.mask,
       });
     }
 
-    const backgroundTiles = computeTilePath(pre.threshold, background, {
-      width,
-      height,
-      splitLen: CONFIG.backgroundSplitLen,
-      blackPixelThreshold: CONFIG.blackPixelThreshold,
-    });
     passes.push({
-      segment: {
-        label: "background",
-        kind: "background",
+      label: "background",
+      kind: "background",
+      splitLen: CONFIG.backgroundSplitLen,
+      fixedSkipRate: CONFIG.backgroundSkipRate,
+      tiles: computeTilePath(pre.threshold, background, {
+        width,
+        height,
         splitLen: CONFIG.backgroundSplitLen,
-        skipRate: CONFIG.backgroundSkipRate,
-        tiles: backgroundTiles,
-        frameCount: segmentFrameCount(backgroundTiles.length, CONFIG.backgroundSkipRate),
-      },
+        blackPixelThreshold: CONFIG.blackPixelThreshold,
+      }),
       mask: background,
     });
   } else {
-    const tiles = computeTilePath(pre.threshold, null, {
-      width,
-      height,
-      splitLen: CONFIG.noMaskSplitLen,
-      blackPixelThreshold: CONFIG.blackPixelThreshold,
-    });
     passes.push({
-      segment: {
-        label: "full",
-        kind: "full",
+      label: "full",
+      kind: "full",
+      splitLen: CONFIG.noMaskSplitLen,
+      fixedSkipRate: CONFIG.noMaskSkipRate,
+      tiles: computeTilePath(pre.threshold, null, {
+        width,
+        height,
         splitLen: CONFIG.noMaskSplitLen,
-        skipRate: CONFIG.noMaskSkipRate,
-        tiles,
-        frameCount: segmentFrameCount(tiles.length, CONFIG.noMaskSkipRate),
-      },
+        blackPixelThreshold: CONFIG.blackPixelThreshold,
+      }),
       mask: null,
     });
   }
+
+  // --- timing ---------------------------------------------------------------
+  const timing = computeSceneTiming(
+    passes.map((pass) => ({
+      kind: pass.kind,
+      tileCount: pass.tiles.length,
+      fixedSkipRate: pass.fixedSkipRate,
+    })),
+    {
+      fps: CONFIG.frameRate,
+      endHoldSeconds: CONFIG.endHoldSeconds,
+      narrationSeconds,
+    },
+  );
 
   // --- assets ---------------------------------------------------------------
   // Replay the passes to capture the true canvas state at each segment boundary.
@@ -220,8 +255,8 @@ async function main() {
     // Canvas state entering this segment is what the composition starts from.
     writeRgbaPng(`${outDir}/cum-${index}.png`, canvas, width, height);
 
-    const { splitLen } = pass.segment;
-    for (const [row, col] of pass.segment.tiles) {
+    const { splitLen } = pass;
+    for (const [row, col] of pass.tiles) {
       for (let y = row * splitLen; y < (row + 1) * splitLen; y++) {
         for (let x = col * splitLen; x < (col + 1) * splitLen; x++) {
           const pixel = y * width + x;
@@ -245,8 +280,16 @@ async function main() {
       }
     }
 
-    segments.push({ ...pass.segment, startFrame });
-    startFrame += pass.segment.frameCount;
+    segments.push({
+      label: pass.label,
+      kind: pass.kind,
+      splitLen: pass.splitLen,
+      skipRate: timing.segments[index].skipRate,
+      tiles: pass.tiles,
+      frameCount: timing.segments[index].frameCount,
+      startFrame,
+    });
+    startFrame += timing.segments[index].frameCount;
   });
 
   writeRgbaPng(`${outDir}/source.png`, pre.source, width, height);
@@ -258,25 +301,63 @@ async function main() {
   const manifest: PathManifest = {
     image,
     mask,
-    config: CONFIG,
+    config: { ...CONFIG, width, height },
     width,
     height,
-    durationInFrames: startFrame + CONFIG.frameRate * CONFIG.endHoldSeconds,
+    durationInFrames: timing.durationInFrames,
+    narrationSeconds,
     segments,
   };
   writeFileSync(`${outDir}/path.json`, JSON.stringify(manifest));
 
-  const totalTiles = segments.reduce((sum, s) => sum + s.tiles.length, 0);
-  console.log(`segments: ${segments.length}  tiles: ${totalTiles}  frames: ${manifest.durationInFrames}`);
-  for (const segment of segments) {
+  if (!quiet) {
+    const totalTiles = segments.reduce((sum, s) => sum + s.tiles.length, 0);
     console.log(
-      `  ${segment.label.padEnd(12)} ${segment.kind.padEnd(10)} tiles=${String(segment.tiles.length).padEnd(6)} frames=${segment.frameCount}`,
+      `${name}: ${width}x${height}  segments ${segments.length}  tiles ${totalTiles}  ` +
+        `frames ${manifest.durationInFrames}` +
+        (narrationSeconds ? `  narration ${narrationSeconds.toFixed(2)}s` : "  fixed rates"),
     );
+    for (const segment of segments) {
+      console.log(
+        `  ${segment.label.padEnd(12)} ${segment.kind.padEnd(10)} ` +
+          `tiles=${String(segment.tiles.length).padEnd(6)} skip=${String(segment.skipRate).padEnd(3)} frames=${segment.frameCount}`,
+      );
+    }
+    if (timing.clamped) {
+      console.log("  note: drawing could not fit the narration; scene extended");
+    }
   }
-  console.log(`wrote assets -> ${outDir}`);
+
+  return manifest;
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+// --- CLI ---------------------------------------------------------------------
+
+function parseArgs() {
+  const args = new Map<string, string>();
+  for (let i = 2; i < process.argv.length; i += 2) {
+    args.set(process.argv[i].replace(/^--/, ""), process.argv[i + 1]);
+  }
+  const image = args.get("image");
+  if (!image) throw new Error("--image is required");
+  return {
+    image: resolve(process.cwd(), image),
+    mask: args.get("mask") ? resolve(process.cwd(), args.get("mask")!) : null,
+    name: args.get("name") ?? "scene",
+    width: args.get("width") ? Number(args.get("width")) : CONFIG.width,
+    height: args.get("height") ? Number(args.get("height")) : CONFIG.height,
+    narrationSeconds: args.get("narration") ? Number(args.get("narration")) : null,
+  };
+}
+
+const isCli = process.argv[1] && import.meta.url.endsWith(process.argv[1].split("/").pop()!);
+if (isCli) {
+  precomputeScene(parseArgs())
+    .then((manifest) => {
+      console.log(`wrote assets for ${manifest.segments.length} segments`);
+    })
+    .catch((error) => {
+      console.error(error);
+      process.exit(1);
+    });
+}

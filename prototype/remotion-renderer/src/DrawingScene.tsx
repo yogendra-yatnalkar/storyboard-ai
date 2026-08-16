@@ -18,6 +18,7 @@ import {
   delayRender,
   staticFile,
   useCurrentFrame,
+  useVideoConfig,
 } from "remotion";
 
 import type { PathManifest } from "./drawing/manifest";
@@ -107,6 +108,7 @@ export const DrawingScene: React.FC<DrawingSceneProps> = ({
   background = "white",
 }) => {
   const frame = useCurrentFrame();
+  const composition = useVideoConfig();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [handle] = useState(() => delayRender(`decoding assets for ${name}`));
@@ -142,6 +144,15 @@ export const DrawingScene: React.FC<DrawingSceneProps> = ({
 
   useEffect(paint, [paint]);
 
+  const canvasWidth = loaded?.manifest.width ?? 1020;
+  const canvasHeight = loaded?.manifest.height ?? 1020;
+
+  // Artwork is generated at the project's aspect ratio, so the normal case is an
+  // exact 1:1 match and the drawing fills the frame with no resampling. The
+  // contain fallback only engages for legacy square fixtures rendered into a
+  // non-square composition.
+  const exact = canvasWidth === composition.width && canvasHeight === composition.height;
+
   return (
     <AbsoluteFill
       style={{
@@ -152,10 +163,13 @@ export const DrawingScene: React.FC<DrawingSceneProps> = ({
     >
       <canvas
         ref={canvasRef}
-        width={loaded?.manifest.width ?? 1020}
-        height={loaded?.manifest.height ?? 1020}
-        // Fit the square drawing into whatever aspect ratio the composition uses.
-        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+        width={canvasWidth}
+        height={canvasHeight}
+        style={
+          exact
+            ? { width: "100%", height: "100%", display: "block" }
+            : { maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }
+        }
       />
     </AbsoluteFill>
   );

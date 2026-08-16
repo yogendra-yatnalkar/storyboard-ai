@@ -50,7 +50,9 @@ export function resolveFrame(manifest: PathManifest, frame: number): FrameState 
     const segment = manifest.segments[index];
     const frameInSegment = frame - segment.startFrame;
     if (frameInSegment >= 0 && frameInSegment < segment.frameCount) {
-      const tilesDrawn = (frameInSegment + 1) * segment.skipRate;
+      // Rounded because a narration-timed scene uses a fractional skip rate; for
+      // the integer rates the reference uses, this is exactly (f + 1) * skipRate.
+      const tilesDrawn = Math.round((frameInSegment + 1) * segment.skipRate);
       return {
         kind: "drawing",
         segmentIndex: index,

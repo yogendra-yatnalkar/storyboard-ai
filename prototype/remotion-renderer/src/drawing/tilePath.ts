@@ -130,6 +130,8 @@ export function segmentFrameCount(tileCount: number, skipRate: number): number {
  * [0, counter) are on the canvas and the hand rests on tile counter - 1.
  */
 export function revealStateForFrame(frameInSegment: number, skipRate: number) {
-  const tilesDrawn = (frameInSegment + 1) * skipRate;
+  // Rounded for narration-timed scenes, which use a fractional skip rate. For an
+  // integer rate this is exactly (frameInSegment + 1) * skipRate.
+  const tilesDrawn = Math.round((frameInSegment + 1) * skipRate);
   return { tilesDrawn, handTileIndex: tilesDrawn - 1 };
 }
