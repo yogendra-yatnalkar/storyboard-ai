@@ -1,0 +1,32 @@
+{
+  "name": "@storyboard-ai/remotion-renderer",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Remotion port of the whiteboard drawing algorithm (parity prototype)",
+  "scripts": {
+    "studio": "remotion studio",
+    "precompute": "tsx scripts/precompute.ts",
+    "compare": "tsx scripts/compare.ts",
+    "render": "remotion render",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "build-video": "tsx scripts/buildVideo.ts"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.416",
+    "@techstark/opencv-js": "4.11.0-release.1",
+    "music-metadata": "^11.14.0",
+    "pngjs": "7.0.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.416"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "@types/pngjs": "6.0.5",
+    "@types/react": "19.2.0",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2"
+  },
+  "type": "module"
+}

@@ -13,4 +13,5 @@ story = [
 
 for i in range(len(story)):
     tts = gTTS(story[i])
-    tts.save(os.path.join(save_folder, f'{i}.mp3'))
+    # 1-indexed to match the image, video and ffmpeg naming used everywhere else
+    tts.save(os.path.join(save_folder, f'{i + 1}.mp3'))

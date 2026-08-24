@@ -6,6 +6,40 @@
 
 ---
 
+### Turning this into a product
+
+Work is underway to turn this research pipeline into a SaaS for solo content creators - story text
+in, narrated whiteboard video out.
+
+The drawing algorithm below has been ported to Remotion and is **pixel-identical** to the original.
+On top of it, the pipeline now assembles a complete narrated, captioned video in one step - which
+replaces every command in `ffmpeg-command-notes.txt`, including the hand-tuned `apad` sync
+corrections.
+
+| Doc | What it covers |
+|---|---|
+| [`docs/status.md`](docs/status.md) | **What is built, what is stubbed, what is not started** |
+| [`docs/product-plan.md`](docs/product-plan.md) | Product definition, decisions, phased roadmap |
+| [`docs/architecture.md`](docs/architecture.md) | System design and the parity constraints |
+| [`docs/cost-model.md`](docs/cost-model.md) | Per-video COGS and pricing analysis |
+| [`docs/development.md`](docs/development.md) | Setup and common tasks |
+| [`docs/testing.md`](docs/testing.md) | The three test layers and what each protects |
+| [`docs/screenshots/`](docs/screenshots/) | Rendered frames and app screenshots |
+| [`prototype/README.md`](prototype/README.md) | The Remotion port and how to reproduce the parity result |
+
+Quick start:
+
+```bash
+pip install -r requirements.txt
+cd packages/pipeline && npm install
+npx tsx src/generate.ts --input "The boy who cried wolf" --out ../../prototype/out/generated
+```
+
+That runs the whole generation path offline with no API keys and reports what the video would have
+cost (~$0.19 for four scenes).
+
+---
+
 https://www.youtube.com/watch?v=iSb1HJXRO04  
 [![https://www.youtube.com/watch?v=iSb1HJXRO04](https://img.youtube.com/vi/iSb1HJXRO04/0.jpg)](https://www.youtube.com/watch?v=iSb1HJXRO04)
 

@@ -1,0 +1,6 @@
+# Reference (Python) pipeline dependencies.
+# The headless OpenCV build is used so the renderer runs in CI containers;
+# swap for opencv-python if you need the GUI functions (cv2.imshow).
+opencv-python-headless>=4.8
+numpy>=1.24
+gTTS>=2.3

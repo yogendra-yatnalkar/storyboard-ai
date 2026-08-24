@@ -259,7 +259,7 @@ def draw_whiteboard_animations(
         save_video_path,
         cv2.VideoWriter_fourcc(*"mp4v"),
         variables.frame_rate,
-        (variables.resize_wd, variables.resize_wd),
+        (variables.resize_wd, variables.resize_ht),
     )
 
     # creating an emtpy frame and select 0th index as the starting point to draw

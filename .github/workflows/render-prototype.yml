@@ -1,0 +1,112 @@
+name: Render prototype parity check
+
+# Manual dispatch only. This is a prototype harness, not production render infra:
+# GitHub's acceptable-use policy limits Actions to compute related to the
+# repository's own development, Actions concurrency is capped per account, and a
+# 30-60s cold start would eat most of the latency budget for a short video.
+# Production rendering belongs on Remotion Lambda - see docs/architecture.md.
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Source image, relative to the repository root
+        default: generate-whiteboard-animated-videos/images/2.png
+      mask:
+        description: labelme/AnyLabeling JSON; leave blank to draw the whole image
+        default: generate-whiteboard-animated-videos/images/2.json
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: prototype/remotion-renderer/package-lock.json
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install renderer dependencies
+        working-directory: prototype/remotion-renderer
+        run: npm ci
+
+      - name: Install pipeline dependencies
+        working-directory: packages/pipeline
+        run: npm install --no-audit --no-fund
+
+      # Fast feedback before the expensive render steps.
+      - name: Unit tests
+        run: |
+          (cd prototype/remotion-renderer && npm run typecheck && npm test)
+          (cd packages/pipeline && npm run typecheck && npm test)
+
+      # Exercises generation end to end with fixture providers - no API keys.
+      - name: Generation pipeline (offline)
+        working-directory: packages/pipeline
+        run: npx tsx src/generate.ts --input "The boy who cried wolf" --out "$GITHUB_WORKSPACE/prototype/out/generated"
+
+      - name: Render the Python reference
+        run: |
+          python prototype/reference/render.py \
+            --image "${{ inputs.image }}" \
+            ${{ inputs.mask && format('--mask {0}', inputs.mask) || '' }} \
+            --dump-path prototype/out/path-python.json \
+            --dump-frames prototype/out/frames-python \
+            --video prototype/out/render-python.mp4
+
+      - name: Precompute the drawing path
+        working-directory: prototype/remotion-renderer
+        run: |
+          npx tsx scripts/precompute.ts \
+            --image "../../${{ inputs.image }}" \
+            ${{ inputs.mask && format('--mask ../../{0}', inputs.mask) || '' }} \
+            --name scene
+
+      - name: Render through Remotion
+        working-directory: prototype/remotion-renderer
+        run: |
+          npx remotion render Whiteboard-Square \
+            "$GITHUB_WORKSPACE/prototype/out/frames-remotion" \
+            --props '{"name":"scene"}' --sequence --image-format=png --log=error
+          npx remotion render Whiteboard-Square \
+            "$GITHUB_WORKSPACE/prototype/out/render-remotion.mp4" \
+            --props '{"name":"scene"}' --log=error
+
+      # Fails the job on any parity regression - compare.ts exits non-zero.
+      - name: Check parity
+        working-directory: prototype/remotion-renderer
+        run: npx tsx scripts/compare.ts --name scene
+
+      - name: Measure frame cost
+        working-directory: prototype/remotion-renderer
+        run: npx tsx scripts/benchmark.ts --name scene
+
+      - name: Build the side-by-side comparison
+        run: |
+          python prototype/reference/make_comparison.py \
+            --left prototype/out/render-python.mp4 \
+            --right prototype/out/render-remotion.mp4 \
+            --out prototype/out/comparison-python-vs-remotion.mp4
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-report
+          retention-days: 14
+          path: |
+            prototype/out/comparison-python-vs-remotion.mp4
+            prototype/out/render-python.mp4
+            prototype/out/render-remotion.mp4
+            prototype/out/parity/
