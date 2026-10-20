@@ -69,7 +69,7 @@ def director_tool_fn(user_instructions: str, research_material: str = None, lang
     - 'description': Visual description for the image generator (what should be DRAWN in this frame)
     - 'visual_setup': Specific visual direction for this frame (composition, key elements, focal points)
     {veo_instruction}
-    - 'search_query': (OPTIONAL) If this scene features a specific real-world person, historical figure, or landmark, provide a search query.
+    - 'search_query': (OPTIONAL) If this scene features a specific real-world person, historical figure, or landmark, provide a search query. This query must be a clean, exact name of the entity (e.g., 'Volodymyr Zelenskyy', 'Vladimir Putin', 'St. Petersburg') without any descriptive style keywords like 'illustration', 'sketch', or 'drawing' to ensure accurate Wikipedia image retrieval.
     - 'text_overlay': (OPTIONAL) If you want specific impactful text visually rendered.
     - 'key_information': Any critical facts/data from the research that this scene must convey
     - 'emotional_beat': The emotional tone of this specific scene
@@ -77,6 +77,13 @@ def director_tool_fn(user_instructions: str, research_material: str = None, lang
     CRITICAL RULES:
     - LANGUAGE: The entire script's narration and summary values MUST be written in {language}.
     - ATTRACTIVE PACING & TONE: You MUST detect pacing instructions from the user.
+    - FULL CONTEXT RETENTION: If the user's instructions or topic asks to "take the entire text extracted", to use the "full context", or mentions animating a news link/article:
+      * Do NOT over-summarize the research material.
+      * You must plan as many scenes as necessary to cover the source material completely.
+      * Write detailed, thorough narration scripts for each scene that capture all key events, factual details, timelines, names, and quotes from the research.
+      * Ensure the narrative flow acts as a comprehensive narration/script of the article, retaining its details to the fullest.
+      * Its fine if narration is long and animation ends fast. 
+    
     
     Output Format (Strict JSON) where all values (specifically 'narration' and 'summary') are in the language '{language}', but the JSON keys remain exactly as defined below in English:
     {{

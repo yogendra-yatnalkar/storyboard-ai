@@ -86,6 +86,26 @@ def segmentation_tool_fn(image_path: str) -> str:
         "segmentations": {}
     }
     
+    # Try to obtain Google ID Token for Cloud Run authentication
+    headers = {}
+    try:
+        import google.auth
+        import google.auth.transport.requests
+        from google.oauth2 import id_token
+        
+        credentials, project = google.auth.default()
+        auth_req = google.auth.transport.requests.Request()
+        credentials.refresh(auth_req)
+        
+        # Audience is the base Cloud Run service URL
+        audience = SAM_API_URL.split("/predict")[0]
+        token = id_token.fetch_id_token(auth_req, audience)
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+            print("Attached Google ID Token for Cloud Run authentication.")
+    except Exception as e:
+        print(f"Note: Cloud Run authentication check: {e}")
+
     for obj in objects:
         print(f"Segmenting object: {obj}...")
         try:
@@ -94,7 +114,7 @@ def segmentation_tool_fn(image_path: str) -> str:
                files = {"file": f}
                data = {"prompt": obj} 
                
-               response = requests.post(SAM_API_URL, files=files, data=data) 
+               response = requests.post(SAM_API_URL, files=files, data=data, headers=headers) 
                
                if response.status_code == 200:
                    result = response.json()

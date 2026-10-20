@@ -35,6 +35,7 @@ def _verify_image_makes_sense(image_path: str, context_prompt: str) -> bool:
         print(f"Warning: Image verification failed: {e}")
         return False
 
+
 def image_gen_tool_fn(prompt: str, reference_image_path: str = None, subject_reference_image_path: str = None) -> str:
     """
     Generates a whiteboard animation image using Gemini 2.5 Flash Image.
@@ -51,6 +52,7 @@ def image_gen_tool_fn(prompt: str, reference_image_path: str = None, subject_ref
         return "Error: GEMINI_API_KEY not configured."
 
     try:
+        
         # Explicitly ask for 16:9 just in case the backend config gets ignored
         contents = [prompt + " Ensure the generated image is in 16:9 aspect ratio (1920x1080). CRITICAL: DO NOT draw any hands, human arms, markers, pens, or people drawing. Draw ONLY the pure artwork on the whiteboard."]
         
@@ -83,24 +85,35 @@ def image_gen_tool_fn(prompt: str, reference_image_path: str = None, subject_ref
                 print(f"Skipping internet reference image {subject_reference_image_path} as it was deemed not useful.")
 
 
-        # Use the configured image generation model
-        response = utils.client.models.generate_content(
-            model=IMAGE_GEN_MODEL,
-            contents=contents,
-        )
-        
+        # Use the configured image generation model with a fallback to text-only if references fail
+        try:
+            response = utils.client.models.generate_content(
+                model=IMAGE_GEN_MODEL,
+                contents=contents,
+            )
+            if not response or response.parts is None:
+                raise ValueError("Response or response.parts is None")
+        except Exception as e:
+            print(f"  [!] Image generation with reference failed ({e}). Retrying with text-only prompt...")
+            text_only_prompt = prompt + " Ensure the generated image is in 16:9 aspect ratio (1920x1080). CRITICAL: DO NOT draw any hands, human arms, markers, pens, or people drawing. Draw ONLY the pure artwork on the whiteboard."
+            response = utils.client.models.generate_content(
+                model=IMAGE_GEN_MODEL,
+                contents=[text_only_prompt],
+            )
+
         output_path = None
-        for part in response.parts:
-            if part.inline_data is not None:
-                image = part.as_image()
-                timestamp = int(time.time())
-                filename = f"generated_image_{timestamp}.png"
-                output_path = os.path.join(utils.GLOBAL_OUTPUT_DIR, filename) if utils.GLOBAL_OUTPUT_DIR else filename
-                image.save(output_path)
-                print(f"Image generated and saved to: {output_path}")
-                break
-            elif part.text:
-                print(f"Model response text: {part.text}")
+        if response and response.parts:
+            for part in response.parts:
+                if part.inline_data is not None:
+                    image = part.as_image()
+                    timestamp = int(time.time())
+                    filename = f"generated_image_{timestamp}.png"
+                    output_path = os.path.join(utils.GLOBAL_OUTPUT_DIR, filename) if utils.GLOBAL_OUTPUT_DIR else filename
+                    image.save(output_path)
+                    print(f"Image generated and saved to: {output_path}")
+                    break
+                elif part.text:
+                    print(f"Model response text: {part.text}")
         
         if output_path:
             return output_path

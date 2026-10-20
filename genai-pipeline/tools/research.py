@@ -41,16 +41,20 @@ def research_tool_fn(context: str) -> str:
     except Exception as e:
         return f"An error occurred during research: {str(e)}"
 
-def web_grounded_research_tool_fn(context: str) -> str:
+def web_grounded_research_tool_fn(context: str, enable_google_search: bool = True, enable_url_context: bool = False) -> str:
     """
-    Performs fast, web-grounded research using standard Gemini model with Google Search Tool enabled.
+    Performs fast, web-grounded research using standard Gemini model with Google Search/URL Context Tools.
     
     Args:
         context: The topic to research.
+        enable_google_search: Whether to enable standard Google Search grounding.
+        enable_url_context: Whether to enable URL Context grounding.
     Returns:
         A concise, factual summary.
     """
     print(f"Starting Web-Grounded Research for: {context}")
+    print(f"  Google Search Tool: {'Enabled' if enable_google_search else 'Disabled'}")
+    print(f"  URL Context Tool: {'Enabled' if enable_url_context else 'Disabled'}")
     
     if not client:
         return "Error: GEMINI_API_KEY not configured."
@@ -58,13 +62,19 @@ def web_grounded_research_tool_fn(context: str) -> str:
     try:
         from google.genai import types
         
-        prompt = f"Perform a comprehensive web search to provide a detailed, factual summary about: {context}. Include key dates, milestones, and important contextual facts. This will be used as a source for a documentary/storyboard script."
+        generation_tools = []
+        if enable_google_search:
+            generation_tools.append({"google_search": {}})
+        if enable_url_context:
+            generation_tools.append({"url_context": {}})
+            
+        prompt = f"Perform a comprehensive web search/research to provide a detailed, factual summary about: {context}. Include key dates, milestones, and important contextual facts. This will be used as a source for a documentary/storyboard script."
         
         response = client.models.generate_content(
             model=MODEL_NAME,
             contents=prompt,
             config=types.GenerateContentConfig(
-                tools=[{"google_search": {}}],
+                tools=generation_tools if generation_tools else None,
             )
         )
         
@@ -74,3 +84,5 @@ def web_grounded_research_tool_fn(context: str) -> str:
 
     except Exception as e:
         return f"An error occurred during web-grounded research: {str(e)}"
+
+

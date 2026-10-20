@@ -73,7 +73,7 @@ def _retry(fn, *args, max_retries: int = 3, delay: float = 5.0, label: str = "",
 
 # --- Main Pipeline ---
 
-def run_pipeline(user_context: str, do_research: bool = True, do_web_search: bool = False, use_internet_image_search: bool = True, fast_mode: bool = False, language: str = "english", enable_veo: bool = False, veo_direction_by_director: bool = False):
+def run_pipeline(user_context: str, do_research: bool = True, do_web_search: bool = False, use_internet_image_search: bool = True, fast_mode: bool = False, language: str = "english", enable_veo: bool = False, veo_direction_by_director: bool = False, enable_url_context: bool = False, enable_google_search: bool = True):
     print(f"--- Starting Storyboard Pipeline for context: {user_context} (Language: {language}) ---")
     
     # 0. Setup Output Directory
@@ -92,7 +92,14 @@ def run_pipeline(user_context: str, do_research: bool = True, do_web_search: boo
         print("Research completed.")
     elif do_web_search:
         print("\nStep 1: Performing Web-Grounded Research (Fast)...")
-        research_report = web_grounded_research_tool_fn(user_context)
+        # Automatically detect URL in user_context if not explicitly passed
+        import re
+        url_match = re.search(r'(https?://[^\s]+)', user_context)
+        has_url = url_match is not None
+        if has_url:
+            print(f"Detected URL in prompt: {url_match.group(1)}")
+                
+        research_report = web_grounded_research_tool_fn(user_context, enable_google_search=enable_google_search, enable_url_context=enable_url_context or has_url)
         print("Web-Grounded Research completed.")
     else:
         print("\nStep 1: Skipping Research as per request. Using provided context directly.")
@@ -321,7 +328,7 @@ def run_pipeline(user_context: str, do_research: bool = True, do_web_search: boo
     # 3. Asset Generation & Processing
     if fast_mode:
         print("\nStep 3: Processing Scenes in Parallel (Fast Mode)...")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             future_to_scene = {
                 executor.submit(process_scene_helper, i + 1, scene, None): i + 1
                 for i, scene in enumerate(scenes)
@@ -378,17 +385,35 @@ def run_pipeline(user_context: str, do_research: bool = True, do_web_search: boo
 
 if __name__ == "__main__":
     context = input("Enter the context for your video: ")
-    res_choice = input("Select research mode: [1] Deep Research, [2] Web Search (Fast), [3] None (default 2): ").strip()
+    res_choice = input("Select research mode: [1] Deep Research, [2] Web Search (Fast), [3] URL Grounding, [4] Both Web Search & URL Grounding, [5] None (default 2): ").strip()
     
     do_research = False
     do_web_search = False
+    enable_google_search = True
+    enable_url_context = False
+    
+    # Check if a URL is in the prompt
+    import re
+    url_match = re.search(r'(https?://[^\s]+)', context)
+    if url_match:
+        enable_url_context = True
+        print(f"URL detected in input. Enabling URL grounding context: {url_match.group(1)}")
     
     if res_choice == '1':
         do_research = True
     elif res_choice == '3':
+        do_web_search = True
+        enable_google_search = False
+        enable_url_context = True
+    elif res_choice == '4':
+        do_web_search = True
+        enable_google_search = True
+        enable_url_context = True
+    elif res_choice == '5':
         pass
     else:
         do_web_search = True
+        enable_google_search = True
         
     image_search_choice = input("Enable internet image search for references? [Y/n] (default Y): ").strip().lower()
     use_internet_image_search = False if image_search_choice in ['n', 'no'] else True
@@ -416,7 +441,9 @@ if __name__ == "__main__":
         fast_mode=fast_mode, 
         language=language, 
         enable_veo=enable_veo, 
-        veo_direction_by_director=veo_direction_by_director
+        veo_direction_by_director=veo_direction_by_director,
+        enable_url_context=enable_url_context,
+        enable_google_search=enable_google_search
     )
 
 
