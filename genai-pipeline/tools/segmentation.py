@@ -3,7 +3,7 @@ import time
 import json
 import requests
 from google.genai import types
-from config import MODEL_NAME, SAM_API_URL
+from config import MODEL_NAME, SAM_API_URL, get_generation_config
 from . import utils
 
 def segmentation_tool_fn(image_path: str) -> str:
@@ -65,9 +65,9 @@ def segmentation_tool_fn(image_path: str) -> str:
         response = utils.client.models.generate_content(
             model=MODEL_NAME,
             contents=contents,
-            config={
-                'response_mime_type': 'application/json'
-            }
+            config=get_generation_config(
+                response_mime_type='application/json'
+            )
         )
         
         objects = json.loads(response.text)
@@ -103,8 +103,23 @@ def segmentation_tool_fn(image_path: str) -> str:
         if token:
             headers["Authorization"] = f"Bearer {token}"
             print("Attached Google ID Token for Cloud Run authentication.")
-    except Exception as e:
-        print(f"Note: Cloud Run authentication check: {e}")
+    except Exception:
+        pass
+
+    if "Authorization" not in headers:
+        try:
+            import subprocess
+            gcloud_token = subprocess.check_output(
+                "gcloud auth print-identity-token",
+                shell=True,
+                text=True,
+                stderr=subprocess.DEVNULL
+            ).strip()
+            if gcloud_token:
+                headers["Authorization"] = f"Bearer {gcloud_token}"
+                print("Attached Google ID Token from gcloud CLI.")
+        except Exception as e:
+            print(f"Note: Cloud Run authentication check: {e}")
 
     for obj in objects:
         print(f"Segmenting object: {obj}...")

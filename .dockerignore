@@ -1,0 +1,13 @@
+.git
+.github
+.vscode
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+output/*
+!output/.gitkeep
+.agents/
+.env
+tests/__pycache__
+storyboard-agent/tests/__pycache__

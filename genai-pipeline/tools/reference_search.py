@@ -1,71 +1,94 @@
+import io
 import os
+import re
 import time
-import json
-import urllib.request
 import urllib.parse
+import urllib.request
+from ddgs import DDGS
+from PIL import Image
 from . import utils
 
-def reference_search_tool_fn(query: str) -> str:
+DEFAULT_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+def reference_search_tool_fn(query: str, max_results: int = 10) -> str:
     """
-    Searches Wikipedia for the given query and downloads the main page image if available.
+    Searches DuckDuckGo Images (via ddgs) for the given query and downloads the best matching image.
     
     Args:
-        query: The subject to search for (e.g., "5th president of France", "Eiffel Tower").
+        query: The subject to search for (e.g., "Kambaksha son of aurangzeb", "Eiffel Tower").
+        max_results: Maximum number of search results to inspect.
         
     Returns:
         The absolute path to the downloaded image, or an error string if not found.
     """
+    if not query or not query.strip():
+        return "Error: Empty query provided for reference search."
+
+    search_query = query.strip()
+    print(f"Reference Search (DDGS): Searching images for '{search_query}'...")
+
     try:
-        # First, search Wikipedia to get the best matching title
-        search_query = urllib.parse.quote(query)
-        search_url = f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={search_query}&utf8=&format=json"
-        
-        req = urllib.request.Request(search_url, headers={'User-Agent': 'StoryboardAI/1.0'})
-        with urllib.request.urlopen(req) as response:
-            search_data = json.loads(response.read().decode('utf-8'))
-            
-        search_results = search_data.get('query', {}).get('search', [])
-        if not search_results:
-            return f"Error: No results found for query '{query}'"
-            
-        best_title = search_results[0]['title']
-        print(f"Reference Search: Found matching Wikipedia article '{best_title}'")
-        
-        # Next, get the main image for this title
-        title_encoded = urllib.parse.quote(best_title)
-        image_url_api = f"https://en.wikipedia.org/w/api.php?action=query&titles={title_encoded}&prop=pageimages&format=json&pithumbsize=1000"
-        
-        req = urllib.request.Request(image_url_api, headers={'User-Agent': 'StoryboardAI/1.0'})
-        with urllib.request.urlopen(req) as response:
-            image_data = json.loads(response.read().decode('utf-8'))
-            
-        pages = image_data.get('query', {}).get('pages', {})
-        page = next(iter(pages.values()))
-        
-        if 'thumbnail' not in page:
-            return f"Error: No image found for article '{best_title}'"
-            
-        image_url = page['thumbnail']['source']
-        print(f"Reference Search: Downloading image from {image_url}")
-        
-        # Download the image
-        timestamp = int(time.time())
-        ext = os.path.splitext(urllib.parse.urlparse(image_url).path)[1]
-        if not ext:
-            ext = ".jpg"
-            
-        filename = f"reference_{timestamp}_{urllib.parse.quote(best_title)}{ext}"
-        
-        # Save to global output dir or current dir
-        output_path = os.path.join(utils.GLOBAL_OUTPUT_DIR, filename) if utils.GLOBAL_OUTPUT_DIR else filename
-        
-        req = urllib.request.Request(image_url, headers={'User-Agent': 'StoryboardAI/1.0'})
-        with urllib.request.urlopen(req) as response:
-            with open(output_path, 'wb') as f:
-                f.write(response.read())
-                
-        print(f"Reference Search: Image saved to {output_path}")
-        return os.path.abspath(output_path)
-        
+        with DDGS() as ddgs:
+            results = list(ddgs.images(search_query, max_results=max_results))
     except Exception as e:
-        return f"Error during reference search for '{query}': {str(e)}"
+        return f"Error querying DDGS images for '{search_query}': {str(e)}"
+
+    if not results:
+        return f"Error: No image results found for query '{search_query}'"
+
+    print(f"Reference Search: Found {len(results)} candidate results from DuckDuckGo.")
+
+    clean_query = re.sub(r"[^\w\-_\. ]", "_", search_query).strip()[:40].replace(" ", "_")
+    timestamp = int(time.time())
+
+    for idx, r in enumerate(results):
+        title = r.get("title", "Untitled")
+        urls_to_try = []
+
+        # Try high-resolution full image first, then fallback to thumbnail
+        if r.get("image"):
+            urls_to_try.append(("high_res", r.get("image")))
+        if r.get("thumbnail"):
+            urls_to_try.append(("thumbnail", r.get("thumbnail")))
+
+        for source_type, img_url in urls_to_try:
+            try:
+                req = urllib.request.Request(img_url, headers=DEFAULT_HEADERS)
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    raw_bytes = resp.read()
+
+                # Basic sanity check on size
+                if len(raw_bytes) < 1000:
+                    continue
+
+                # Validate image data using Pillow
+                img = Image.open(io.BytesIO(raw_bytes))
+                img_format = (img.format or "JPEG").lower()
+                ext = ".jpg" if img_format == "jpeg" else f".{img_format}"
+
+                filename = f"reference_{timestamp}_{clean_query}_{idx}{ext}"
+                output_path = os.path.join(utils.GLOBAL_OUTPUT_DIR, filename) if utils.GLOBAL_OUTPUT_DIR else filename
+
+                with open(output_path, "wb") as f:
+                    f.write(raw_bytes)
+
+                print(
+                    f"Reference Search: Downloaded candidate #{idx} ({source_type}) "
+                    f"'{title[:60]}' -> {output_path} ({img.size[0]}x{img.size[1]})"
+                )
+                return os.path.abspath(output_path)
+
+            except Exception as e:
+                # Silently try next url / candidate
+                continue
+
+    return f"Error: Could not successfully download any valid image candidate for '{search_query}'"

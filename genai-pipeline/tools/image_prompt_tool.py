@@ -1,4 +1,4 @@
-from config import MODEL_NAME
+from config import MODEL_NAME, get_generation_config
 from .utils import client, _save_to_run_folder
 
 def prompt_tool_fn(scene_description: str, visual_setup: str = "", text_overlay: str = "", global_plan: dict = None) -> str:
@@ -71,7 +71,8 @@ def prompt_tool_fn(scene_description: str, visual_setup: str = "", text_overlay:
     try:
         response = client.models.generate_content(
             model=MODEL_NAME,
-            contents=prompt
+            contents=prompt,
+            config=get_generation_config()
         )
         result = response.text.strip()
         result = result.replace('\"', '"').replace('`', '').strip()

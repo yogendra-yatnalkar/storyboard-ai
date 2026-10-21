@@ -1,4 +1,4 @@
-from config import MODEL_NAME
+from config import MODEL_NAME, get_generation_config
 from .utils import client, _save_to_run_folder
 from google.genai import types
 import os
@@ -122,7 +122,8 @@ def refine_narration_tool_fn(original_narration: str, image_path: str, video_dur
             contents=[
                 prompt,
                 types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
-            ]
+            ],
+            config=get_generation_config()
         )
         
         result = response.text.strip()

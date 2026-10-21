@@ -147,3 +147,5 @@ old/
 *.wt
 .vscode/
 .agents/
+output/
+storyboard-agent/output/

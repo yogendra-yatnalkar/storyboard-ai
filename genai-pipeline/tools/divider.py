@@ -1,7 +1,7 @@
 import json
 import re
 from typing import List, Dict, Any
-from config import MODEL_NAME
+from config import MODEL_NAME, get_generation_config
 from .utils import client, _save_to_run_folder
 
 def divider_tool_fn(research_output: str) -> Dict[str, Any]:
@@ -58,9 +58,9 @@ def divider_tool_fn(research_output: str) -> Dict[str, Any]:
         response = client.models.generate_content(
             model=MODEL_NAME,
             contents=prompt,
-            config={
-                'response_mime_type': 'application/json'
-            }
+            config=get_generation_config(
+                response_mime_type='application/json'
+            )
         )
         result = json.loads(response.text)
         _save_to_run_folder(json.dumps(result, indent=2), "video_plan.json")

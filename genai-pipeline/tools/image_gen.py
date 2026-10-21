@@ -1,7 +1,7 @@
 import os
 import time
 from google.genai import types
-from config import IMAGE_GEN_MODEL, MODEL_NAME
+from config import IMAGE_GEN_MODEL, MODEL_NAME, get_generation_config
 from . import utils
 
 def _verify_image_makes_sense(image_path: str, context_prompt: str) -> bool:
@@ -24,7 +24,7 @@ def _verify_image_makes_sense(image_path: str, context_prompt: str) -> bool:
         response = utils.client.models.generate_content(
             model=MODEL_NAME,
             contents=[prompt, image_part],
-            config=types.GenerateContentConfig(
+            config=get_generation_config(
                 tools=[{"google_search": {}}],
             )
         )

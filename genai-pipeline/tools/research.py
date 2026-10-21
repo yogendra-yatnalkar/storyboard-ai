@@ -1,5 +1,5 @@
 import time
-from config import DEEP_RESEARCH_MODEL, MODEL_NAME
+from config import DEEP_RESEARCH_MODEL, MODEL_NAME, get_generation_config
 from .utils import client, _save_to_run_folder
 
 def research_tool_fn(context: str) -> str:
@@ -73,7 +73,7 @@ def web_grounded_research_tool_fn(context: str, enable_google_search: bool = Tru
         response = client.models.generate_content(
             model=MODEL_NAME,
             contents=prompt,
-            config=types.GenerateContentConfig(
+            config=get_generation_config(
                 tools=generation_tools if generation_tools else None,
             )
         )

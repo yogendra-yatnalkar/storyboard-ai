@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storyboard AI Studio — Multi-Agent Video Production</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Studio Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-badge">SB</div>
+        <div>
+          <h1>Storyboard AI Studio</h1>
+          <div class="tagline">Google ADK Multi-Agent Showrunner &bull; Gemini 3.8 Flash &bull; Veo 720p &bull; SAM 3</div>
+        </div>
+      </div>
+      <div class="header-status">
+        <span id="system-badge" class="badge badge-idle">
+          <span class="pulse-dot"></span>
+          <span id="system-status-text">Ready</span>
+        </span>
+        <button id="btn-open-history" class="btn-secondary" title="View historical runs">
+          📂 Past Runs
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="main-workspace">
+      <!-- Left Column: Studio Controls, Screenplay Gate, Working Scene & Gallery -->
+      <section class="studio-main">
+        <!-- Pipeline Stepper -->
+        <div class="stepper-container">
+          <div id="step-1" class="step-item active">
+            <span class="step-number">1</span>
+            <span>Research & Grounding</span>
+          </div>
+          <span class="step-arrow">&rarr;</span>
+          <div id="step-2" class="step-item">
+            <span class="step-number">2</span>
+            <span>Screenplay Review (HITL)</span>
+          </div>
+          <span class="step-arrow">&rarr;</span>
+          <div id="step-3" class="step-item">
+            <span class="step-number">3</span>
+            <span>Episodic Video Production</span>
+          </div>
+          <span class="step-arrow">&rarr;</span>
+          <div id="step-4" class="step-item">
+            <span class="step-number">4</span>
+            <span>Master Concatenation</span>
+          </div>
+        </div>
+
+        <!-- Studio Control & Production Prompt Card -->
+        <div class="card" id="production-card">
+          <div class="card-title">
+            <span>🎬 Storyboard Production Prompt</span>
+            <span class="badge badge-idle" id="config-pill">720p Native &bull; Veo Enabled</span>
+          </div>
+
+          <div class="prompt-group">
+            <label for="prompt-input">Video Topic or Source Script</label>
+            <textarea id="prompt-input" class="prompt-input" placeholder="e.g. The Fall of Ahmednagar (1707) and the chaotic Mughal succession war between Azam Shah and Bahadur Shah I..."></textarea>
+            <div class="prompt-chips">
+              <span class="chip" data-prompt="The Mughal Collapse (1707-1720): Death of Aurangzeb and fratricidal war between Azam Shah and Bahadur Shah I">Mughal Collapse 1707</span>
+              <span class="chip" data-prompt="Apollo 11: The Tense Descent to the Lunar Surface and Eagle Landing (July 1969)">Apollo 11 Moon Landing</span>
+              <span class="chip" data-prompt="The Secret Engineering of the Roman Colosseum and Under-Arena Hypogeum">Roman Colosseum</span>
+              <span class="chip" data-prompt="Deep Sea Bioluminescence: How creatures survive the Mariana Trench abyssal zone">Deep Sea Creatures</span>
+            </div>
+          </div>
+
+          <div class="controls-row">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Narration Mode</label>
+              <select id="mode-select" class="select-control">
+                <option value="creative">Creative Mode (Historical Documentary Arc)</option>
+                <option value="verbatim">Strict Verbatim Mode (Exact Text Locked)</option>
+              </select>
+            </div>
+            <div style="display: flex; align-items: flex-end; padding-bottom: 0.3rem;">
+              <span class="badge badge-idle" style="padding: 0.45rem 0.85rem; font-size: 0.8rem; border-color: rgba(56, 189, 248, 0.25);">
+                ✨ Episodic Parts: Auto (Decided by Agent / Inferred from Prompt)
+              </span>
+            </div>
+            <div>
+              <button id="btn-start-production" class="btn-generate">
+                🚀 Start Production
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Run Metadata Bar (Shown during or after run) -->
+        <div id="run-meta-bar" class="run-meta-bar" style="display: none;">
+          <div>
+            <span>Run: </span><strong id="meta-run-id">-</strong>
+            <span style="margin: 0 0.5rem; color: var(--border-color);">|</span>
+            <span>Output Folder: </span><span id="meta-folder-name" class="meta-folder">-</span>
+          </div>
+          <div>
+            <span id="meta-asset-count" class="badge badge-idle">0 Assets</span>
+          </div>
+        </div>
+
+        <!-- HUMAN-IN-THE-LOOP APPROVAL PANEL (Revealed when Turn 1 halts at Review Gate) -->
+        <div id="hitl-panel" class="hitl-panel" style="display: none;">
+          <div class="hitl-header">
+            <div class="hitl-title">
+              <span>🛡️ Human-in-the-Loop Review Gate</span>
+            </div>
+            <span class="badge badge-hitl">Waiting for Director Approval</span>
+          </div>
+          <p id="hitl-prompt-text" style="font-size: 0.9rem; color: #fde68a; margin-bottom: 1rem;">
+            The Screenwriter and Grounding Agent have structured the screenplay. Please review the episodic breakdown below before video rendering begins.
+          </p>
+
+          <!-- Structured Screenplay Overview -->
+          <div id="screenplay-container" class="screenplay-overview">
+            <!-- Dynamically populated Part Cards -->
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Director Instructions / Revision Notes (Optional)</label>
+            <input type="text" id="hitl-feedback-input" class="prompt-input" style="min-height: unset; padding: 0.5rem 0.8rem;" value="Approved. Proceed with video production and assembly.">
+          </div>
+
+          <div class="hitl-actions">
+            <button id="btn-approve-screenplay" class="btn-approve">
+              ✅ Approve Screenplay &amp; Render Video
+            </button>
+            <button id="btn-cancel-run" class="btn-cancel">
+              Cancel Production
+            </button>
+          </div>
+        </div>
+
+        <!-- EPISODIC PARTS PRODUCTION & INTERMEDIATE STATUS (Updated live after every part completes) -->
+        <div id="parts-production-section" class="card" style="display: none;">
+          <div class="card-title">
+            <span>📦 Episodic Parts &amp; Intermediate State</span>
+            <span id="parts-overall-badge" class="badge badge-idle">0 / 0 Parts Done</span>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Live intermediate outputs (3x2 comic grids, sliced panels, working scene clips, and part masters) verified from state and disk upon completion of each Part.
+          </div>
+          <div id="parts-cards-container" class="parts-grid-container">
+            <!-- Dynamically populated Part Status Cards -->
+          </div>
+        </div>
+
+        <!-- LIVE WORKING SCENE SPOTLIGHT (Real-time video/image live playback) -->
+        <div id="live-spotlight" class="live-spotlight">
+          <div class="card-title">
+            <span>🔴 Live Working Scene Output</span>
+            <span id="live-scene-tag" class="badge badge-idle">Awaiting Scene</span>
+          </div>
+          <div class="live-player-wrapper">
+            <video id="live-video-player" controls autoplay muted loop playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720' viewBox='0 0 1280 720'%3E%3Crect fill='%230f1118' width='1280' height='720'/%3E%3Ctext fill='%2364748b' font-family='sans-serif' font-size='24' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3ELive Working Scene Stream Will Appear Here%3C/text%3E%3C/svg%3E">
+              <source id="live-video-source" src="" type="video/mp4">
+            </video>
+            <img id="live-image-player" style="display: none; width: 100%; height: 100%; object-fit: contain; background: #000;" alt="Live Working Image">
+            <div id="live-overlay-pill" class="live-badge-overlay" style="display: none;">
+              <span id="live-overlay-dot" class="pulse-dot" style="background: var(--accent-rose);"></span>
+              <span id="live-overlay-text">Live Render</span>
+            </div>
+          </div>
+          <div class="live-player-info">
+            <div id="live-scene-caption" style="color: var(--text-muted); font-size: 0.82rem;">
+              No active scene rendering. Start a production run to watch real-time animation, Veo motion, and panel assembly.
+            </div>
+            <div id="live-download-slot"></div>
+          </div>
+        </div>
+
+        <!-- MULTI-VIEW ASSET GALLERY & DUMP EXPLORER -->
+        <div class="card">
+          <div class="tabs-header">
+            <button class="tab-btn active" data-tab="final_movie">🎬 Final Master Movie <span class="tab-badge" id="badge-master">0</span></button>
+            <button class="tab-btn" data-tab="part_masters">🎞️ Part Masters <span class="tab-badge" id="badge-parts">0</span></button>
+            <button class="tab-btn" data-tab="subscenes">🎥 Working Scenes <span class="tab-badge" id="badge-subscenes">0</span></button>
+            <button class="tab-btn" data-tab="grids_panels">🖼️ Comic Grids &amp; Panels <span class="tab-badge" id="badge-panels">0</span></button>
+            <button class="tab-btn" data-tab="references">🎭 Character Portraits <span class="tab-badge" id="badge-refs">0</span></button>
+            <button class="tab-btn" data-tab="folder_dump">📁 Output Folder Dump <span class="tab-badge" id="badge-dump">0</span></button>
+          </div>
+
+          <!-- Tab 1: Final Master Movie -->
+          <div id="tab-final_movie" class="tab-pane">
+            <div id="master-empty" style="text-align: center; padding: 2.5rem; color: var(--text-dim); font-size: 0.9rem;">
+              Final master movie will be assembled once all episodic parts complete.
+            </div>
+            <div id="master-showcase" style="display: none;">
+              <div class="live-player-wrapper" style="aspect-ratio: 16/9; max-width: 800px; margin: 0 auto;">
+                <video id="final-master-player" controls playsinline>
+                  <source id="final-master-source" src="" type="video/mp4">
+                </video>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div>
+                  <h3 id="master-title" style="font-size: 1.1rem; color: var(--text-main);">Final Movie Master</h3>
+                  <div id="master-meta" style="font-size: 0.8rem; color: var(--accent-cyan);">Duration: - | Resolution: 1280x720 25fps</div>
+                </div>
+                <a id="btn-download-master" class="btn-secondary" href="#" download>
+                  ⬇️ Download Master Movie (.mp4)
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Part Masters -->
+          <div id="tab-part_masters" class="tab-pane" style="display: none;">
+            <div id="part-masters-grid" class="gallery-grid">
+              <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-dim);">No Part masters assembled yet.</div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Working Scenes (All subscenes) -->
+          <div id="tab-subscenes" class="tab-pane" style="display: none;">
+            <div id="subscenes-grid" class="gallery-grid">
+              <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-dim);">No working scenes rendered yet.</div>
+            </div>
+          </div>
+
+          <!-- Tab 4: Comic Grids & Slices -->
+          <div id="tab-grids_panels" class="tab-pane" style="display: none;">
+            <div id="grids-panels-grid" class="gallery-grid">
+              <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-dim);">No 3x2 comic grids or panel slices generated yet.</div>
+            </div>
+          </div>
+
+          <!-- Tab 5: References -->
+          <div id="tab-references" class="tab-pane" style="display: none;">
+            <div id="references-grid" class="gallery-grid">
+              <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-dim);">No historical portrait references acquired yet.</div>
+            </div>
+          </div>
+
+          <!-- Tab 6: Output Folder Dump Tree -->
+          <div id="tab-folder_dump" class="tab-pane" style="display: none;">
+            <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.8rem;">
+              Showing all files created in the run's unique dated directory:
+            </div>
+            <div id="folder-dump-list" style="display: flex; flex-direction: column; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.78rem;">
+              <div style="color: var(--text-dim); padding: 1rem;">No files in output directory yet.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Live Terminal Stream & Budget Dashboard -->
+      <aside class="console-container">
+        <!-- Terminal Card -->
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">
+              <span>🖥️ ADK Director Agent Console</span>
+            </div>
+            <button id="btn-clear-logs" style="background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 0.75rem;">Clear</button>
+          </div>
+          <div id="terminal-logs" class="terminal-logs">
+            <div class="log-line">
+              <span class="log-time">[System]</span>
+              <span class="log-text">Storyboard AI Studio initialized. Ready for new production run.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget & Expenditure Widget -->
+        <div class="budget-card">
+          <div class="card-title" style="margin-bottom: 0.6rem; font-size: 0.85rem;">
+            <span>💰 Production Cost &amp; Token Budget</span>
+            <span style="font-size: 0.75rem; color: var(--accent-emerald);">Live Tracker</span>
+          </div>
+          <div class="budget-grid">
+            <div class="budget-stat">
+              <div style="color: var(--text-dim);">Gemini 3.8 Flash</div>
+              <div id="budget-tokens" class="budget-val">0 tokens</div>
+            </div>
+            <div class="budget-stat">
+              <div style="color: var(--text-dim);">Gemini Flash Image</div>
+              <div id="budget-images" class="budget-val">0 calls ($0.00)</div>
+            </div>
+            <div class="budget-stat">
+              <div style="color: var(--text-dim);">Veo 3.1 720p</div>
+              <div id="budget-veo" class="budget-val">0 clips</div>
+            </div>
+            <div class="budget-stat">
+              <div style="color: var(--text-dim);">Estimated Total</div>
+              <div id="budget-total" class="budget-val" style="color: var(--accent-emerald);">$0.000</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Historical Runs Modal Drawer -->
+    <div id="history-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <button id="btn-close-history" class="modal-close">&times;</button>
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">📂 Past Generation Runs</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Browse all output folders created in <code>output/</code>.
+        </p>
+        <div id="history-folders-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="color: var(--text-dim); padding: 1rem;">Loading past runs...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Media Lightbox Modal -->
+    <div id="lightbox-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content" style="max-width: 1000px; text-align: center;">
+        <button id="btn-close-lightbox" class="modal-close">&times;</button>
+        <div id="lightbox-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

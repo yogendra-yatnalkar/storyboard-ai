@@ -1,7 +1,7 @@
 import json
 import re
 from typing import List, Dict, Any
-from config import MODEL_NAME
+from config import MODEL_NAME, get_generation_config
 from .utils import client, _save_to_run_folder
 
 def director_tool_fn(user_instructions: str, research_material: str = None, language: str = "english", enable_veo: bool = False, veo_direction_by_director: bool = False) -> Dict[str, Any]:
@@ -118,9 +118,9 @@ def director_tool_fn(user_instructions: str, research_material: str = None, lang
         response = client.models.generate_content(
             model=MODEL_NAME,
             contents=prompt,
-            config={
-                'response_mime_type': 'application/json'
-            }
+            config=get_generation_config(
+                response_mime_type='application/json'
+            )
         )
         result = json.loads(response.text)
         _save_to_run_folder(json.dumps(result, indent=2), "video_plan.json")

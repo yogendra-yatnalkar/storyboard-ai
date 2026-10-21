@@ -1,144 +1,194 @@
 # Storyboard AI
 
-> [!NOTE]
-> **Latest Release**: SAM3 object segmentation is now completely optional, allowing you to run the entire pipeline directly with just your Gemini API key (running whiteboard animations in single-pass mode).
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Google ADK 2.11.0](https://img.shields.io/badge/Google%20ADK-2.11.0-orange.svg)](https://github.com/google/adk)
+[![Google GenAI SDK](https://img.shields.io/badge/google--genai-2.31.0-green.svg)](https://github.com/googleapis/python-genai)
 
-An intelligent agentic pipeline that automates the creation of high-quality, fully narrated whiteboard animation videos from a simple text prompt.
-
-## Overview
-
-Storyboard AI is a complete end-to-end framework. It takes in a high-level topic or context and handles everything: researching the topic, writing a compelling narrative script, planning the visual storyboard, generating custom whiteboard-style artwork, animating the drawing process, synthesizing voiceover narration, and burning perfectly timed subtitles.
-
-It operates autonomously using an agentic approach, meaning the Director Agent breaks down the user request into manageable scenes, delegates tasks to specialized sub-agents/tools, and finally stitches everything back together.
-
-### Demo Video: *What is Adhik Maas and its relation with Shalivahan Shaka (HINDI)  (strictly 4 scenes)*
-
-> [!IMPORTANT]
-> The entire demo video below was generated automatically from a **single input prompt/instruction**: the title itself.
-
-https://github.com/user-attachments/assets/433e86bc-7ad4-433b-8b09-117e1f3af9e9
-
-**Major Pipeline Steps Executed:**
-1. **Web-search (not deepresearch)**: Performed web-grounded research to gather facts about Adhik Maas and Shalivahan Shaka.
-2. **Grounded Image Generation**: Generated custom whiteboard illustrations utilizing internet-grounded reference images for scene visual accuracy.
-3. **Whiteboard Animation + Veo**: Segmented objects and calculated vector sketch contours using SAM 3 for custom drawing animation, alongside Veo video generation to stitch dynamic segments.
-4. **Gemini Native Audio TTS**: Synthesized high-quality narration audio in Hindi natively.
+An enterprise-grade **Multi-Agent Video Studio** built on the **Google Agent Development Kit (`google.adk` 2.11.0)** that transforms any topic or verbatim script into a fully animated, narrated, and subtitled historical documentary movie.
 
 ---
 
----
+## Architecture: Google ADK 2.0 Graph Workflow & Multi-Agent Studio
 
-## Core Features
+Storyboard AI is structured as a native **Google ADK 2.0 Graph Workflow (`google.adk.Workflow`)** orchestrating specialized episodic nodes and tools without monolithic procedural shortcuts:
 
-- **Full Gemini Stack**: Uses the latest Gemini models for planning (LLM), custom whiteboard image prompt expansion, and narrating (TTS).
-- **Web Search & Deep Research Options**: Supports both quick Google Search web grounding and comprehensive Deep Research agents to write highly detailed and factual scripts.
-- **Reference Image Grounding**: Automatically searches the web for reference images of real-world entities (e.g., historical figures or landmarks) for each scene and feeds them to the image generator to maintain accurate structural accuracy.
-- **Multi-lingual Support**: Prompts the Director, generates script narration, and creates subtitles dynamically across multiple languages (e.g., Hindi, English, Spanish).
-- **SAM 3 Integration**: Integrates the state-of-the-art **Segment Anything Model 3** to isolate object boundaries.
-- **Custom Animation Engine**: Translates segmented object contours into fluid, custom stroke-by-stroke hand-drawn whiteboard animations.
-- **Veo Video Generation Integration**: Optionally integrates with Veo video generation models to insert rich AI-generated video segments dynamically into planned scenes.
-
----
-
-## ⚡ Key Advantages
-
-- **Grounded & Dynamic Videos**: Requires **only a single text instruction or prompt** to start. The Director Agent autonomously handles research, scriptwriting, scene composition, image/video generation, audio pacing, and compilation.
-- **Huge Cost Savings**: Stretches and paces static line-art animations dynamically to match the audio narration length. For example, a 4-scene project requires only 32 seconds of total raw visual sequences (8 seconds * 4 scenes), but the animation engine stretches and times the sketch paths to create a complete, high-quality **2 min 30 sec video** without expensive video-generation API calls.
-
----
-
-## ⚙️ Setup & Configuration
-
-### 1. Environment Configuration (`.env`)
-Create a `.env` file in the `genai-pipeline` folder (or copy `genai-pipeline/.env.example`) and configure the following variables:
-
-```ini
-# Google API Key for LLM, TTS, Image Gen, and Veo Video Gen
-GOOGLE_API_KEY="your-google-api-key-here"
-
-# Hugging Face Access Token (Optional: Only required to download SAM 3 model weights if hosting SAM3 yourself)
-# HF_API_KEY="your-huggingface-token-here"
-
-# Set to TRUE if using Vertex AI, or FALSE to use Google Developer API (default)
-GOOGLE_GENAI_USE_VERTEXAI=FALSE
+```mermaid
+graph TD
+    Start([START]) --> PlanNode["Node 1: Story Planning Node<br/>(Google Search Grounding + Screenwriter)"]
+    PlanNode --> ReviewNode["Node 2: HITL Review Gate<br/>(Presents breakdown + RequestInput)"]
+    ReviewNode -->|Human Approval| LoopNode["Node 3: Director Parts Loop Node<br/>(Sequentially dispatches Part 1..N)"]
+    
+    subgraph PartWorkflow [Episodic Part Production Node (Dispatched per Part)]
+        LoopNode --> RefTool["1. Reference Portrait Search<br/>(DDGS + Wikipedia Commons)"]
+        RefTool --> GridGen["2. Dynamic 3x2 Comic Grid Artist<br/>(Gemini 3.1 Flash Image + Theme Context)"]
+        GridGen --> CVSlice["3. CV 16:9 720p Panel Slicer"]
+        CVSlice --> SubLoop["4. Sequential 6-Panel Loop<br/>(SAM 3 + Whiteboard + Veo + Calibrated TTS)"]
+        SubLoop --> PartConcat["5. Part Master Assembly<br/>(part_i_master.mp4 + Storage Cleanup)"]
+    end
+    
+    PartConcat -->|Context returns to Director Loop| LoopNode
+    LoopNode -->|All Parts Finished| AssemblyNode["Node 4: Master Movie Assembly Node<br/>(Concatenates Part videos into Final Movie)"]
+    AssemblyNode --> MasterVideo([Master Movie MP4<br/>output/YYYY-MM-DD-HH-MM-SS-title/])
 ```
 
-### 2. SAM 3 Model Hosting (FastAPI & GCP Cloud Run - Optional)
-The whiteboard drawing sequence generator can utilize instance segmentation for advanced multi-pass drawing. We host a self-contained FastAPI server that wraps the **Segment Anything Model 3 (SAM 3)**.
-- **Optional Setup**: If no `SAM_API_URL` is provided, the pipeline will skip the segmentation phase and run the whiteboard animation in single-pass mode. This allows new users to start running the pipeline directly using just their Gemini API key.
-- **Hosting Instructions**: For complete setup instructions on obtaining weights, configuring the Docker container, and deploying to Google Cloud Run with GPU accelerators (NVIDIA L4), please refer to the detailed [SAM 3 Hosting Guide](./sam3-hosting/README.md) in the `sam3-hosting/` folder.
+---
 
-### 3. Pipeline Configuration Settings (`config.py`)
-Core configuration parameters are set in [genai-pipeline/config.py](./genai-pipeline/config.py):
-- **`SAM_API_URL`**: Set this to your deployed SAM 3 Cloud Run endpoint (e.g., `https://sam3-service-xxxx-xx.a.run.app/predict`). If left as an empty string `""`, SAM3 segmentation is skipped, and whiteboard animations are drawn in single-pass mode.
-- **`MODEL_NAME`**: The model used for the Director Agent (default: `gemini-2.5-pro`).
-- **`IMAGE_GEN_MODEL`**: The image generation model used for drawing line art (default: `gemini-3-pro-image`).
-- **`VEO_MODEL`**: The video generation model (default: `veo-3.1-generate-preview`).
+## Core Capabilities & Engineering Innovations
 
-### 4. Python Environment & Dependencies
-Set up your Python environment (Conda environment recommended) and install the verified dependencies:
-- **Core GenAI Pipeline**: Install dependencies via the root [requirements.txt](./requirements.txt).
-- **SAM 3 Model Server**: Install dependencies via [sam3-hosting/requirements.txt](./sam3-hosting/requirements.txt) if not using the Docker image.
-- *Refer to the [How to Run & View Outputs](#-how-to-run--view-outputs) section below for installation and CLI execution steps.*
+### 1. Divergent Dual-Mode Execution
+- **Creative Mode (Visual-First)**:
+  - Visuals lead the production. Fast whiteboard drawing (720p H.264) is rendered first.
+  - If a sub-scene is marked as a climactic beat and Veo is enabled, an 8-second Veo clip is synthesized and seamlessly attached to the drawing ($V_{\text{total}} = V_{\text{draw}} + 8\text{s}$). No duration gate restricts Veo.
+  - The **Narration Refiner** calibrates the spoken word count to match the visual duration ($V_{\text{total}} + 1.5\text{s}$ hold).
+  - Gemini Native TTS (Aoede) synthesizes human-like narration, merged with zero cropping and burned subtitles.
+- **Strict Verbatim Mode (Audio-First)**:
+  - Source text is locked with 0 word alterations.
+  - Verbatim audio is synthesized first to measure exact spoken duration ($A_{\text{dur}}$).
+  - Whiteboard drawing speed adaptively scales to match $A_{\text{dur}}$.
+  - **Veo Duration Gate (Verbatim Mode Only)**: Evaluates $A_{\text{dur}} \ge V_{\text{draw}} + 6.0\text{s}$. If audio is too short, Veo is gated OFF to prevent unnatural frozen frames or dead air.
+
+### 2. Mandatory Grand Opening Title Scene
+- **Part 1, Sub-scene 1** (the very first scene of the entire video) is strictly enforced as a grand cinematic prologue.
+- The visual generator places a prominent, ornate title banner, marquee, or royal parchment scroll with bold comic typography displaying the movie's main title, introducing the historical saga before proceeding to the narrative beats.
+
+### 3. Ultra-Fast Whiteboard Animation Engine
+- Optimized stroke detection grids (`split_len=16`, `object_skip_rate=12`, `bg_object_skip_rate=20`) render full 720p drawings in **~2.28 seconds** (down from 15–20s).
+- **H.264 Normalization**: Automatically converts OpenCV `mp4v` output to native **H.264 (`yuv420p` @ 25.0 fps)** immediately upon release, preventing downstream bitstream decoding damage.
+
+### 4. Normalized 720p 25fps Filter-Complex Concatenation
+- Uses explicit FFmpeg `filter_complex` with aspect-ratio preservation and fixed 25fps timebases:
+  ```bash
+  [0:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,fps=25,setsar=1,format=yuv420p[v0];
+  [1:v]scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,fps=25,setsar=1,format=yuv420p[v1];
+  [v0][v1]concat=n=2:v=1:a=0[outv]
+  ```
+- Guaranteed **zero decoding errors** and zero dropped frames when attaching Veo clips to whiteboard drawings.
+
+### 5. Automatic Storage Cleanup & Transient Retries
+- **Sub-Scene Cleanup**: Once the final subtitled sub-scene video is verified, intermediate raw assets (drawing-only video, raw Veo clips, intermediate WAV audio, un-subtitled AV files, and segmentation JSON) are automatically deleted.
+- **Part Cleanup**: Once the Part Master video (`part_{i}_master.mp4`) is assembled and verified, the 6 individual sub-scene clips are purged.
+- **Retry Logic**: Key synthesis steps (TTS, Whiteboard drawing, AV merge) include automatic retry handling to gracefully recover from temporary network blips.
+
+### 6. Readable Dated Output Directories
+- Outputs are saved into self-describing, timestamped directories:
+  ```
+  output/YYYY-MM-DD-HH-MM-SS-<slugified-title>/
+  ├── gen_image_1.png                              # 3x2 Comic Grid
+  ├── part_1_master.mp4                            # Part 1 Master Video
+  ├── part_2_master.mp4                            # Part 2 Master Video
+  ├── part_3_master.mp4                            # Part 3 Master Video
+  └── YYYY-MM-DD-HH-MM-SS-<title>-master.mp4       # Final Assembled Movie
+  ```
 
 ---
 
-## 🚀 How to Run & View Outputs
+## Directory Structure
 
-### Step 1: Install Python Dependencies
-Depending on the component you are running, install the appropriate requirements:
+```
+storyboard-ai/
+├── storyboard-agent/
+│   ├── agents/                           # Pure Google ADK Agents
+│   │   ├── __init__.py                   # Exporting factory methods
+│   │   ├── director_agent.py             # Level 1 Showrunner (Search Grounding & Movie Concat)
+│   │   ├── writer_agent.py               # Level 2 Screenplay & Verbatim Chunker
+│   │   ├── part_production_agent.py      # Level 2 Episodic Director (6 Sub-Scene Coordinator)
+│   │   └── tools_common.py               # Common ADK State Tools & Media Processors
+│   ├── assets/                           # Drawing hand and mask assets
+│   ├── config.py                         # Global configuration (Veo, SAM, Resolution, Models)
+│   ├── cost_tracker.py                   # Token and financial expenditure auditor
+│   ├── main.py                           # Interactive CLI entrypoint
+│   ├── state.py                          # Session and production data models
+│   ├── tests/                            # Complete isolated test suite
+│   │   ├── test_tool_panel_veo_concat.py # Unit test: Drawing + Veo lossless concat
+│   │   ├── test_subagent_panel.py        # Unit test: Sub-agent single panel & gate
+│   │   ├── test_adk_3part_movie.py       # Integration test: 3-Part movie production
+│   │   └── ...                           # Component unit tests
+│   └── tools/                            # Low-level CV, GenAI & Media tools
+│       ├── draw_animation.py             # Fast Whiteboard Drawing Engine
+│       ├── grid_panel_tool.py            # 3x2 Grid Slicer & Comic Framing
+│       ├── image_gen_tool.py             # Gemini 3.1 Flash Image Interface
+│       ├── media_tools.py                # Normalized FFmpeg Concat, Veo & Subtitle Burner
+│       ├── narration_refiner.py          # Narration Word Calibration
+│       ├── reference_evaluator.py        # Portrait Grounding (DDGS + Wikipedia)
+│       ├── segmentation_tool.py          # SAM 3 Instance Segmentation
+│       ├── tts_tool.py                   # Gemini Native Aoede TTS
+│       └── utils.py                      # Global media utilities & output management
+├── requirements.txt                      # Project dependencies
+└── README.md                             # Documentation
+```
 
-- **For the Core GenAI Pipeline**:
-  Install the main dependencies in your Python/Conda environment using the root [requirements.txt](./requirements.txt):
-  ```bash
-  pip install -r requirements.txt
-  ```
+---
 
-- **For the SAM 3 Self-Hosting Server**:
-  If you are running or building the SAM 3 endpoint locally (instead of using the pre-configured [Dockerfile](./sam3-hosting/Dockerfile)), install the dependencies listed in [sam3-hosting/requirements.txt](./sam3-hosting/requirements.txt):
-  ```bash
-  pip install -r sam3-hosting/requirements.txt
-  ```
+## Quick Start
 
-### Step 2: Run the Pipeline CLI
+### 1. Prerequisites
+- Python 3.10+ (Conda environment recommended)
+- `ffmpeg` installed and available on system PATH
+- A Google Gemini API Key (`GEMINI_API_KEY`)
+
+### 2. Installation
 ```bash
-# Navigate to the core agent directory
-cd genai-pipeline
+# Clone the repository
+git clone https://github.com/your-username/storyboard-ai.git
+cd storyboard-ai
 
-# Run the interactive pipeline script
-python pipeline.py
+# Activate your environment
+conda activate storyboard-ai
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-### Step 3: Interactive CLI Setup
-The CLI will guide you through:
-1. **Context/Prompt**: Enter the main topic for your video (e.g., "The History of Space Travel").
-2. **Research Mode**: Choose between `[1]` Deep Research, `[2]` Web Search (Fast), or `[3]` None.
-3. **Reference Images**: Enable or disable internet search for visual references (`Y/n`).
-4. **Fast Mode**: Enable parallel image/audio generation for all scenes to save time (`Y/n`).
-5. **Narration Language**: Enter the target language for the script (e.g., `hindi` or `english`).
-6. **Veo Video**: Enable or disable Veo AI video generation (`y/N`).
+### 3. Environment Configuration
+Create a `.env` file or export your Gemini API key:
+```bash
+export GEMINI_API_KEY="your-gemini-api-key"
+```
 
-### Step 4: Locate Outputs
-All intermediate assets and final outputs are saved under the `genai-pipeline/output/run_<timestamp>/` folder:
-- **`storyboard_final_video.mp4`**: The completed, stitched whiteboard animation video with narration, background drawing paths, and burned subtitles.
-- **`scene_<N>/`**: Individual folders for each scene containing the raw generated images, voiceover audio (.mp3), SAM 3 segmentation masks, subtitles, and scene-level sketch videos.
+Configure settings in `storyboard-agent/config.py`:
+- `ENABLE_VEO = True` (or `False` to run without Veo)
+- `ENABLE_SAM = True` (or `False` to run without Cloud Run SAM 3)
+- `OUTPUT_WIDTH = 1280`, `OUTPUT_HEIGHT = 720` (Standard 720p HD)
+
+### 4. Running the Web Studio UI
+Launch the interactive web UI:
+```bash
+python run_ui.py
+```
+Open **http://localhost:8080** in your browser.
+- **Real-time Live Working Scene Player**: Live video preview as whiteboard drawings, Veo clips, and panel audio are created.
+- **Interactive HITL Review Gate**: Turn 1 pauses for human director approval of the structured screenplay before Turn 2 video production begins.
+- **Per-Run Output Directories**: Every run automatically creates a new timestamped folder in `output/` with all intermediate and master assets.
+- **Multi-Tab Asset Gallery & Folder Explorer**: Browse character portraits, 3x2 comic grids, sliced 720p panels, and part masters.
+
+### 5. Running the CLI Entrypoint
+```bash
+python storyboard-agent/main.py
+```
+
+### 6. Cloud Run Deployment
+The application is pre-configured for Google Cloud Run:
+```bash
+# Build and deploy directly from source
+gcloud run deploy storyboard-ai-studio \
+  --source . \
+  --region us-central1 \
+  --set-env-vars GEMINI_API_KEY="your-gemini-api-key" \
+  --allow-unauthenticated
+```
+
+### 7. Running Unit Tests
+Unit tests are located in `storyboard-agent/tests/`:
+```bash
+# Test Web UI server & multi-turn HITL lifecycle
+python storyboard-agent/tests/test_ui_server.py
+
+# Test ADK 2.0 two-level graph workflow & HITL review gate
+python storyboard-agent/tests/test_adk_workflow_hitl.py
+```
 
 ---
 
-## 🏷️ Release v1.0.0
+## License
 
-This release marks the official launch of **Storyboard AI v1.0.0**! With this launch, the agentic whiteboard generation pipeline is fully operational with complete end-to-end automation, multimodal asset generation (images, speech pacing, video stitching), and optional GPU-accelerated SAM 3 segments hosting on GCP Cloud Run.
-
----
-
-## 🗺️ Roadmap & Upcoming Features
-
-We are actively developing new features to expand compatibility and ease of deployment:
-- **Broad Model Support (Beyond Gemini)**: Expanding language model coverage starting with **Sarvam AI** support.
-
----
-
-## ✅ Completed Features
-
-- **Standalone Mode (No SAM 3 Server Needed)**: Added support for running the pipeline out-of-the-box using only a Gemini API key. If no `SAM_API_URL` is provided, it skips the SAM3 model server requirement and automatically runs whiteboard drawing in single-pass mode.
-
+This project is licensed under the Apache License 2.0.

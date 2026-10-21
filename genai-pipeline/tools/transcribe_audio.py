@@ -6,7 +6,7 @@ import os
 import json
 import time
 from google.genai import types
-from config import MODEL_NAME
+from config import MODEL_NAME, get_generation_config
 from . import utils
 
 
@@ -130,7 +130,8 @@ Rules:
                     mime_type=uploaded_file.mime_type
                 ),
                 transcription_prompt
-            ]
+            ],
+            config=get_generation_config()
         )
         
         # Step 3: Parse the response
